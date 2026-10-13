@@ -1,0 +1,39 @@
+# Hostinger (LiteSpeed/Apache) rules for the static FordFit site.
+Options -MultiViews -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# HTTPS, and www -> fordfitpt.com (the canonical address)
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://fordfitpt.com%{REQUEST_URI} [L,R=301]
+
+# GHL served the home page at /home and /index too
+RewriteRule ^(home|index|index\.html)$ / [L,R=301]
+
+# Old /page.html requests -> /page
+RewriteCond %{THE_REQUEST} \s/([^\s?]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [L,R=301]
+
+# Drop trailing slashes (GHL URLs have none)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [L,R=301]
+
+# Serve /about-me from about-me.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+<IfModule mod_headers.c>
+  # Astro's hashed bundles and the media never change under the same name
+  <FilesMatch "\.(css|js|webp|png|jpg|svg|mp4|woff2)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

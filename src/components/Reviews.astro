@@ -1,0 +1,77 @@
+---
+import Icon from './Icon.astro';
+import { REVIEWS, REVIEW_SUMMARY } from '../data/reviews.js';
+import { SITE } from '../site.js';
+
+const PER_PAGE = 3;
+const pages = Math.ceil(REVIEWS.length / PER_PAGE);
+const fmtDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<div class="reviews" data-reviews data-per-page={PER_PAGE}>
+  <div class="reviews-head">
+    <div>
+      <h2 class="reviews-title">WHAT OUR CLIENTS SAY</h2>
+      <p class="reviews-intro">{REVIEW_SUMMARY.intro}</p>
+    </div>
+    <div class="reviews-score">
+      <div>
+        <p class="reviews-rating">{REVIEW_SUMMARY.rating}</p>
+        <p class="stars" aria-label="5 out of 5 stars">{[1, 2, 3, 4, 5].map(() => <Icon name="star" size={14} />)}</p>
+      </div>
+      <a class="btn btn-review" href={SITE.googleReviewUrl} target="_blank" rel="noopener">Write a review</a>
+    </div>
+  </div>
+
+  <div class="reviews-summary">
+    <p class="reviews-summary-title">AI Summary</p>
+    <ul>
+      {REVIEW_SUMMARY.highlights.map((h) => <li>{h}</li>)}
+    </ul>
+  </div>
+
+  <ul class="review-cards">
+    {REVIEWS.map((r, i) => (
+      <li class="review-card" data-page={Math.floor(i / PER_PAGE)} hidden={i >= PER_PAGE}>
+        <div class="review-top">
+          <span class="review-score">{r.rating} <span class="stars">{Array.from({ length: r.rating }).map(() => <Icon name="star" size={13} />)}</span></span>
+          <time datetime={r.date}>{fmtDate(r.date)}</time>
+        </div>
+        <p class="review-text">{r.text}</p>
+        <div class="review-foot">
+          <span>{r.name}</span>
+          <Icon name="google" size={16} />
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  {pages > 1 && (
+    <nav class="review-pager" aria-label="Review pages">
+      <button type="button" data-step="-1" aria-label="Previous reviews">‹</button>
+      {Array.from({ length: pages }).map((_, p) => (
+        <button type="button" data-page={p} aria-current={p === 0 ? 'true' : undefined}>{p + 1}</button>
+      ))}
+      <button type="button" data-step="1" aria-label="Next reviews">›</button>
+    </nav>
+  )}
+</div>
+
+<script>
+  const root = document.querySelector('[data-reviews]');
+  const pager = root?.querySelector('.review-pager');
+  if (root && pager) {
+    const cards = [...root.querySelectorAll('.review-card')];
+    const nums = [...pager.querySelectorAll('[data-page]')];
+    let page = 0;
+    const go = (p) => {
+      page = (p + nums.length) % nums.length;
+      cards.forEach((c) => (c.hidden = Number(c.dataset.page) !== page));
+      nums.forEach((b, i) => b.toggleAttribute('aria-current', i === page));
+    };
+    pager.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      go(b.dataset.step ? page + Number(b.dataset.step) : Number(b.dataset.page));
+    });
+  }
+</script>

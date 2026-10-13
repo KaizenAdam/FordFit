@@ -1,0 +1,38 @@
+---
+import Icon from './Icon.astro';
+import { SITE, SERVICES, SOCIALS, START_URL } from '../site.js';
+const explore = [
+  { label: 'About Me', href: '/about-me' },
+  { label: 'Online Coaching', href: '/online-coaching' },
+  ...SERVICES.filter((s) => s.href !== '/online-coaching').map((s) => ({ label: s.footer, href: s.href })),
+];
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h2 class="footer-h">EXPLORE</h2>
+      <ul class="footer-links">
+        {explore.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </div>
+    <div class="footer-follow">
+      <h2 class="footer-h">FOLLOW ME</h2>
+      <ul class="socials">
+        {SOCIALS.map((s) => (
+          <li><a href={s.href} target="_blank" rel="noopener" aria-label={s.name}><Icon name={s.icon} size={20} /></a></li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="footer-h">CONTACT</h2>
+      <p class="footer-contact"><Icon name="phone-square" size={14} /><a href={SITE.phoneHref}>{SITE.phone}</a></p>
+      <p class="footer-contact"><Icon name="envelope" size={14} /><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    </div>
+    <div>
+      <h2 class="footer-h footer-h-sm">START TODAY</h2>
+      <p class="footer-tag">MAKE A DIFFERENCE.</p>
+      <a class="btn btn-footer" href={START_URL}>CLICK HERE</a>
+    </div>
+  </div>
+  <p class="footer-credit">SITE BUILT &amp; MAINTAINED BY KAIZEN SOLUTIONS. ALL RIGHTS RESERVED.</p>
+</footer>

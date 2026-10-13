@@ -1,0 +1,191 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Reviews from '../components/Reviews.astro';
+import { START_URL } from '../site.js';
+
+// TODO: the saved GHL page had no <title> or meta description. Copy them from the GHL
+// page's SEO settings if they were set there.
+const title = 'FordFit Personal Training | Long Stratton, Wymondham & Online';
+const description =
+  'FordFit Personal Training: 1-to-1 personal training in Long Stratton and Wymondham, at home with a mobile gym, or online through the FordFit app.';
+
+// Carried over from the GHL page.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'FordFit Personal Training-Norwich',
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: 5.0, reviewCount: 82 },
+};
+
+const offers = [
+  {
+    label: 'in person coaching',
+    price: 'From £45 Per Hour',
+    items: [
+      ['1-to-1 coaching at ', '<strong>Long Stratton Leisure Centre</strong>'],
+      ['1-to-1 sessions at ', '<strong>NR Fitness in Wymondham</strong>'],
+      ['', '<strong>At-home personal training</strong> with our mobile gym'],
+      ['', '<strong>Small group</strong> and <strong>partner</strong> sessions available'],
+    ],
+    cta: 'LEARN MORE',
+    href: '/in-person-coaching',
+    note: 'Book single sessions or block packages — no long-term contracts.',
+  },
+  {
+    label: 'online coaching',
+    price: 'From £20 Per Month',
+    items: [
+      ['Full access to the ', '<strong>FordFit App</strong>'],
+      ['', '<strong>Weekly</strong> progress check-ins'],
+      ['Fully tailored ', '<strong>training and nutrition</strong> plans'],
+      ['', '<strong>Ongoing support</strong> from your personal coach'],
+    ],
+    cta: 'START TODAY',
+    href: '/online-coaching',
+    note: 'No contracts. Cancel anytime.',
+  },
+];
+
+const faqs = [
+  ['How much does personal training cost?', 'FordFit offers flexible pricing to suit your goals and schedule. In-person sessions start from £<strong>45 per hour</strong>, and online coaching starts from <strong>£20 per month</strong>. You can choose single sessions or discounted blocks — no long-term contracts required.'],
+  ['Where do sessions take place?', 'We run personal training from <strong>Long Stratton Leisure Centre</strong> and <strong>NR Fitness in Wymondham</strong>. We also offer <strong>at-home personal training</strong> using our fully equipped mobile gym and <strong>online coaching</strong> through the FordFit App.'],
+  ['Do I need to be fit before starting?', 'Not at all. Every FordFit programme is built around your current ability, fitness level, and confidence. Whether you’re new to training or looking to push performance further, Toby adapts each session to help you progress safely.'],
+  ['What’s included with online coaching?', 'Online clients get full access to the <strong>FordFit App</strong>, personalised training and nutrition plans, weekly check-ins, and ongoing coach support — perfect if you prefer to train from home or at your own gym.'],
+  ['How do I get started?', 'Simply click <strong>Start Your Journey</strong> and choose your preferred training option. We’ll contact you to discuss your goals, set up your first session, and tailor your plan to fit your lifestyle.'],
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <!-- Hero -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero">
+        <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.webp">
+          <source src="/assets/video/hero.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-content">
+          <h2 class="hero-kicker">Personal Training in Long Stratton, Wymondham &amp; Online</h2>
+          <h1 class="hero-title"><span>MAKE.</span><span>A.</span><span>DIFFERENCE.</span></h1>
+          <p class="hero-text">FordFit Personal Training helps you become the best version of yourself — in the gym, at home, or online. Work 1-to-1 with a qualified coach who’s dedicated to building strength, confidence, and sustainable results that last.</p>
+          <a class="btn btn-white" href={START_URL}>START YOUR JOURNEY</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Train smarter -->
+  <section class="smarter-section">
+    <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/silk-1-poster.webp" aria-hidden="true">
+      <source src="/assets/video/silk-1.mp4" type="video/mp4" />
+    </video>
+    <div class="container smarter">
+      <div class="smarter-rotator">
+        <div class="ks-rotator" aria-label="Train smarter. Feel stronger. Live better.">
+          <div class="ks-viewport" aria-hidden="true">
+            <div class="ks-track">
+              <div>TRAIN SMARTER.</div>
+              <div>FEEL STRONGER.</div>
+              <div>LIVE BETTER.</div>
+              <div>TRAIN SMARTER.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="smarter-copy">
+        <p>At FordFit, every plan is built around <strong>you</strong>. With proven methods, science-based coaching, and real accountability, our programmes help clients across Norfolk — from Long Stratton to Wymondham — achieve lasting results.</p>
+        <a class="btn btn-black btn-wide" href={START_URL}>START YOUR JOURNEY</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we offer -->
+  <section class="offer-section">
+    <div class="container">
+      <p class="eyebrow">WHAT WE OFFER</p>
+      <h2 class="section-title">PERSONAL TRAINING THAT FITS YOUR LIFESTYLE</h2>
+      <div class="offer-cards" data-carousel>
+        {offers.map((o) => (
+          <article class="offer-card">
+            <h3 class="offer-label">{o.label}</h3>
+            <p class="offer-price">{o.price}</p>
+            <ul class="offer-list">
+              {o.items.map(([pre, rest]) => (
+                <li><Icon name="check-circle" size={14} /><span>{pre}<Fragment set:html={rest} /></span></li>
+              ))}
+            </ul>
+            <a class="btn btn-black btn-block" href={o.href}>{o.cta}</a>
+            <p class="offer-note">{o.note}</p>
+          </article>
+        ))}
+      </div>
+      <div class="carousel-dots" aria-hidden="true"><span aria-current="true"></span><span></span></div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="reviews-section">
+    <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/silk-2-poster.webp" aria-hidden="true">
+      <source src="/assets/video/silk-2.mp4" type="video/mp4" />
+    </video>
+    <div class="container">
+      <Reviews />
+    </div>
+  </section>
+
+  <!-- Coach -->
+  <section class="coach-section">
+    <div class="container">
+      <div class="coach-card">
+        <div class="coach-copy">
+          <p class="coach-kicker">Toby Forder – Founder of FordFit</p>
+          <h2 class="coach-title">THE COACH THAT'LL CHANGE YOUR LIFE</h2>
+          <p>Toby is more than a personal trainer — he’s the driving force behind FordFit Personal Training, helping people across Long Stratton, Wymondham, and beyond build stronger, healthier, more confident lives.</p>
+          <p>With years of experience in fitness coaching and a passion for helping clients reach their potential, Toby’s approach goes beyond physical results. His personalised training combines accountability, motivation, and proven methods — whether you’re training in the gym, at home, or online through the FordFit app.</p>
+        </div>
+        <div class="coach-side">
+          <img class="coach-photo" src="/assets/img/toby-forder.webp" alt="Toby Forder training with battle ropes" width="1000" height="1000" loading="lazy" />
+          <a class="btn btn-black btn-story" href="/about-me">
+            <span class="btn-main">CLICK HERE</span>
+            <span class="btn-sub">To Hear Toby's Story</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-head">
+        <p class="eyebrow eyebrow-wide">Still Not Sure?</p>
+        <h2 class="section-title faq-title">FREQUENTLY ASKED QUESTIONS</h2>
+        <p class="faq-intro">We know starting your fitness journey can feel overwhelming — so here are the most common questions people ask before joining <strong>FordFit Personal Training</strong>.</p>
+      </div>
+      <div class="faq-list">
+        {faqs.map(([q, a]) => (
+          <details class="faq-item">
+            <summary><h3>{q}</h3><Icon name="caret-down" size={14} /></summary>
+            <p set:html={a} />
+          </details>
+        ))}
+      </div>
+      <div class="faq-cta"><a class="btn btn-black" href={START_URL}>START YOUR JOURNEY</a></div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Offer cards become a swipe carousel on phones (replaces the GHL custom script).
+  const track = document.querySelector('[data-carousel]');
+  const dots = [...document.querySelectorAll('.carousel-dots span')];
+  if (track && dots.length) {
+    track.addEventListener('scroll', () => {
+      const i = Math.round(track.scrollLeft / track.clientWidth);
+      dots.forEach((d, j) => d.toggleAttribute('aria-current', j === i));
+    }, { passive: true });
+  }
+  // Respect reduced-motion: pause background videos.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('video[autoplay]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); });
+  }
+</script>

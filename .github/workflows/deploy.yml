@@ -1,0 +1,37 @@
+# Builds the site and publishes the finished files to the `hostinger` branch.
+# Hostinger's Git deployment (hPanel -> Advanced -> Git) pulls that branch into public_html;
+# it can't run a build itself on shared hosting.
+name: Build for Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Publish dist/ to the hostinger branch
+        run: |
+          cd dist
+          git init -q -b hostinger
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -qm "Build ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" hostinger

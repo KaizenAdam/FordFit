@@ -1,0 +1,99 @@
+---
+import Icon from './Icon.astro';
+import { SERVICES, START_URL } from '../site.js';
+---
+<header class="site-header">
+  <div class="container header-row">
+    <a class="brand" href="/" aria-label="FordFit Personal Training home">
+      <img class="brand-full" src="/assets/img/fordfit-logo.png" alt="FordFit Personal Training" width="240" height="80" />
+      <img class="brand-icon" src="/assets/img/fordfit-icon.png" alt="FordFit Personal Training" width="64" height="64" />
+    </a>
+
+    <nav class="main-nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/about-me">About Me</a>
+      <div class="has-mega">
+        <button type="button" class="mega-toggle" aria-expanded="false" aria-controls="mega-services">
+          Services <Icon name="chevron-down" size={12} />
+        </button>
+        <div class="mega" id="mega-services">
+          <div class="ff-supermenu" data-ff-supermenu>
+            <ul class="ff-menu">
+              {SERVICES.map((s) => (
+                <li><a href={s.href} data-img={s.img}>{s.label}</a></li>
+              ))}
+            </ul>
+            <div class="ff-visual" aria-hidden="true">
+              {SERVICES.map((s, i) => (
+                <img src={s.img} alt="" width="200" height="200" loading="lazy" class={i === 0 ? 'is-visible' : ''} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <a class="btn btn-header" href={START_URL}>Start Your Journey</a>
+
+    <button type="button" class="menu-open" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+      <Icon name="menu" size={24} />
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <button type="button" class="menu-close" aria-label="Close menu"><Icon name="close" size={28} /></button>
+    <nav aria-label="Mobile">
+      <a href="/">Home</a>
+      <a href="/about-me">About Me</a>
+      <p class="mobile-menu-label">Services</p>
+      {SERVICES.map((s) => <a class="sub" href={s.href}>{s.label}</a>)}
+      <a class="btn btn-black" href={START_URL}>Start Your Journey</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Services mega menu: hover/focus swaps the preview image (as the GHL custom code did).
+  const root = document.querySelector('[data-ff-supermenu]');
+  if (root) {
+    const links = [...root.querySelectorAll('.ff-menu a')];
+    const imgs = [...root.querySelectorAll('.ff-visual img')];
+    const show = (i) => {
+      links.forEach((a, j) => a.toggleAttribute('aria-current', j === i));
+      imgs.forEach((img, j) => img.classList.toggle('is-visible', j === i));
+    };
+    show(0);
+    links.forEach((a, i) => {
+      a.addEventListener('mouseenter', () => show(i));
+      a.addEventListener('focus', () => show(i));
+    });
+  }
+
+  // Click/keyboard toggle for touch devices (desktop opens on hover via CSS).
+  const toggle = document.querySelector('.mega-toggle');
+  const wrap = document.querySelector('.has-mega');
+  toggle?.addEventListener('click', () => {
+    const open = wrap.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('click', (e) => {
+    if (wrap && !wrap.contains(e.target)) {
+      wrap.classList.remove('open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Mobile menu
+  const menu = document.getElementById('mobile-menu');
+  const openBtn = document.querySelector('.menu-open');
+  const closeBtn = document.querySelector('.menu-close');
+  const setMenu = (open) => {
+    menu.hidden = !open;
+    openBtn.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+    (open ? closeBtn : openBtn).focus();
+  };
+  openBtn?.addEventListener('click', () => setMenu(true));
+  closeBtn?.addEventListener('click', () => setMenu(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) setMenu(false); });
+</script>

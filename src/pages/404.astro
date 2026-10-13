@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { START_URL } from '../site.js';
+---
+<Base title="Page not found | FordFit Personal Training">
+  <section class="notfound">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1 class="section-title">PAGE NOT FOUND</h1>
+      <p class="faq-intro">That page has moved or doesn’t exist.</p>
+      <div class="faq-cta">
+        <a class="btn btn-black" href="/">BACK TO HOME</a>
+        <a class="btn btn-black" href={START_URL}>START YOUR JOURNEY</a>
+      </div>
+    </div>
+  </section>
+</Base>
