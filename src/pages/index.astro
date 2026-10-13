@@ -11,13 +11,6 @@ const title = 'FordFit Personal Training | Long Stratton, Wymondham & Online';
 const description =
   'FordFit Personal Training: 1-to-1 personal training in Long Stratton and Wymondham, at home with a mobile gym, or online through the FordFit app.';
 
-// Carried over from the GHL page.
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Product',
-  name: 'FordFit Personal Training-Norwich',
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: 5.0, reviewCount: 82 },
-};
 
 const offers = [
   {
@@ -56,7 +49,7 @@ const faqs = [
   ['How do I get started?', 'Simply click <strong>Start Your Journey</strong> and choose your preferred training option. We’ll contact you to discuss your goals, set up your first session, and tailor your plan to fit your lifestyle.'],
 ];
 ---
-<Base title={title} description={description} schema={schema}>
+<Base title={title} description={description}>
   <!-- Hero -->
   <section class="hero-section">
     <div class="container">

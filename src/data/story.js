@@ -2,7 +2,7 @@
 export const STORY = [
   {
     title: 'Toby, Founder of FordFit',
-    body: 'I’m Toby, founder of FordFit Personal Training — a 22-year-old personal trainer and online coach from Norwich, dedicated to helping people feel stronger, healthier, and more confident. I’m a Level 3 Qualified Personal Trainer and Level 2 Gym Instructor, and I’ve built FordFit to help clients across Norfolk and beyond achieve results that truly last.',
+    body: 'I’m Toby, founder of FordFit Personal Training — a 23-year-old personal trainer and online coach from Norwich, dedicated to helping people feel stronger, healthier, and more confident. I’m a Level 3 Qualified Personal Trainer and Level 2 Gym Instructor, and I’ve built FordFit to help clients across Norfolk and beyond achieve results that truly last.',
   },
   {
     title: 'A Lifelong Passion for Sport',
