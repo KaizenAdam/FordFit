@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import Reviews from '../components/Reviews.astro';
+import ReviewWidget from '../components/ReviewWidget.astro';
 import { START_URL } from '../site.js';
 
 // TODO: the saved GHL page had no <title> or meta description. Copy them from the GHL
@@ -128,7 +128,7 @@ const faqs = [
       <source src="/assets/video/silk-2.mp4" type="video/mp4" />
     </video>
     <div class="container">
-      <Reviews />
+      <div class="review-widget"><ReviewWidget /></div>
     </div>
   </section>
 

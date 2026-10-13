@@ -4,8 +4,6 @@ export const SITE = {
   phone: '07495 141804',
   phoneHref: 'tel:+447495141804',
   email: 'toby@fordfitpt.com',
-  // TODO: replace with the "ask for reviews" link from the Google Business Profile.
-  googleReviewUrl: 'https://www.google.com/maps/search/?api=1&query=FordFit+Personal+Training',
 };
 
 export const SERVICES = [
