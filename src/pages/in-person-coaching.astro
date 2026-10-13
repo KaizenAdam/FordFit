@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+import VenueHero from '../components/VenueHero.astro';
+import ReviewsBand from '../components/ReviewsBand.astro';
+import AppPromo from '../components/AppPromo.astro';
+
+const reasons = [
+  { icon: '/assets/img/icon-target.png', text: 'PERSONALISED PROGRAMMING AND PROGRESSION TRACKING' },
+  { icon: '/assets/img/icon-eye.png', text: 'LIVE FEEDBACK AND FORM CORRECTION' },
+  { icon: '/assets/img/icon-bicep.png', text: 'MOTIVATION AND ACCOUNTABILITY FROM YOUR COACH' },
+  { icon: '/assets/img/icon-nutrition.png', text: 'TAILORED ADVICE ON RECOVERY, AND NUTRITION' },
+];
+const MAP = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d155325.34516001435!2d1.0917664!3d52.5341847!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s';
+const venues = [
+  {
+    label: 'LONG STRATTON',
+    logo: '/assets/img/leisure-logo-dark.webp',
+    logoAlt: 'South Norfolk Leisure',
+    text: 'Train in a modern, welcoming environment at <strong>South Norfolk Leisure Centre</strong>, right in the heart of Long Stratton. This fully equipped facility offers everything you need for strength, cardio, and functional training — with FordFit sessions designed to make every visit count.',
+    map: MAP + '0x47d9dda0d24cce89%3A0xe10a6c21f2e44bf5!2sFordFit%20Personal%20Training!5e0!3m2!1sen!2suk!4v1762946146227!5m2!1sen!2suk',
+    href: '/personal-training-South-Norfolk-Leisure-Center',
+  },
+  {
+    label: 'WYMONDHAM',
+    logo: '/assets/img/nr-logo-grey.webp',
+    logoAlt: 'New Revolution Health & Fitness Club',
+    text: 'Prefer a high-energy, focused training space? FordFit also runs sessions from <strong>New Revolution Health &amp; Fitness Club</strong> in Wymondham — a 24/7 gym with everything from heavy lifting zones to cardio and functional areas.',
+    map: MAP + '0x47d9e9a6f48dbdfd%3A0xa664bd634d1b9255!2sFordFit%20Personal%20Training!5e0!3m2!1sen!2suk!4v1762946116541!5m2!1sen!2suk',
+    href: '/Personal-Training-New-Revolution-Wymondham',
+  },
+];
+---
+<Base
+  title="In-Person Personal Training | FordFit 1-to-1 Coaching"
+  description="Train in person with FordFit. Tailored 1-to-1 coaching, expert guidance and structured sessions designed to help you get fitter and more confident."
+>
+  <VenueHero
+    bg="/assets/img/hero-in-person.webp"
+    bgMobile="/assets/img/hero-in-person-mobile.webp"
+    kicker="Train together. Push harder. Feel stronger."
+    kickerFont="open-sans"
+    title="In-Person Personal Training with FordFit"
+  >
+    Train smarter, stay consistent, and achieve more with one-to-one coaching from FordFit. Toby offers fully tailored in-person sessions at two leading Norfolk gyms — <strong>New Revolution in Wymondham</strong> and <strong>South Norfolk Leisure Centre in Long Stratton</strong> — giving you hands-on guidance and expert support every step of the way.
+  </VenueHero>
+
+  <section class="why-ip">
+    <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/silk-1-poster.webp" aria-hidden="true">
+      <source src="/assets/video/silk-1.mp4" type="video/mp4" />
+    </video>
+    <div class="container">
+      <h2 class="why-ip-title">WHY CHOOSE IN-PERSON COACHING</h2>
+      <p class="why-ip-sub">With FordFit’s in-person training, you’ll get a session that’s <strong>designed around you</strong> — your goals, your fitness level, and your schedule.</p>
+      <ul class="reasons" data-rise>
+        {reasons.map((r, i) => (
+          <li class="reason" style={`--delay:${i * 120}ms`}>
+            <span class="reason-icon"><img src={r.icon} alt="" width="26" height="26" /></span>
+            <span class="reason-text">{r.text}</span>
+          </li>
+        ))}
+      </ul>
+      <a class="btn btn-wide-rounded" href="#reviews">SEE WHAT OUR CLIENTS SAY</a>
+    </div>
+  </section>
+
+  <section class="venues">
+    <div class="container">
+      <p class="eyebrow">TRAIN LOCAL, TRAIN SMART</p>
+      <h2 class="section-title venues-title">PERSONAL TRAINING ACROSS SOUTH NORFOLK</h2>
+      <div class="venue-cards">
+        {venues.map((v) => (
+          <article class="venue-card">
+            <h3 class="venue-label">{v.label}</h3>
+            <img class="venue-card-logo" src={v.logo} alt={v.logoAlt} width="300" height="120" loading="lazy" />
+            <p class="venue-card-text" set:html={v.text} />
+            <iframe class="venue-map" src={v.map} title={`Map: FordFit Personal Training, ${v.label.toLowerCase()}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            <a class="btn btn-read" href={v.href}>READ MORE</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="container group-grid">
+      <div class="group-copy">
+        <h2>1-TO-1 NOT YOUR THING?<br />TRAIN TOGETHER INSTEAD</h2>
+        <p>Prefer working out with a friend? FordFit offers <strong>group personal training</strong> so you can share the session, lower the cost, and keep each other motivated. It’s the same expert coaching and tailored programming — just with an extra boost of accountability and energy. Train, push, and progress together while keeping your fitness journey fun and affordable.</p>
+      </div>
+      <div class="stickmen" data-stickmen aria-label="One to four people training together" role="img">
+        {[0, 1, 2, 3].map((i) => <img src="/assets/img/icon-person.png" alt="" width="100" height="100" class:list={['stickman', { visible: i === 0 }]} />)}
+      </div>
+    </div>
+  </section>
+
+  <ReviewsBand id="reviews" bg="var(--smoke)" widgetId="68fb40c9a3dea7f0faafbf77" />
+  <div class="ip-divider"><div class="container"><hr /></div></div>
+
+  <AppPromo
+    kicker="Online Coaching with the FordFit App"
+    lines={['IN PERSON NOT', 'YOUR THING?', 'TRAIN ANYWHERE.']}
+    font="open-sans"
+    text="If in-person training isn’t for you, the FordFit App brings expert coaching straight to your phone. Get custom workouts, nutrition support, and real accountability — wherever you train. Stay connected, stay consistent, and keep progressing on your own terms."
+  />
+</Base>
+
+<style>
+  .why-ip { position: relative; overflow: hidden; border-top: 3px solid var(--black); padding: 50px 0 40px; text-align: center; }
+  .why-ip .container { position: relative; z-index: 1; }
+  .why-ip-title { font-family: var(--poppins); font-size: 37px; font-weight: 700; line-height: 1.3; }
+  .why-ip-sub { font-family: var(--open-sans); font-size: 16px; font-weight: 500; line-height: 1.3; margin: 20px 0 40px; }
+  .reasons { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 2.2vw, 24px); text-align: left; }
+  .reason {
+    display: grid; grid-template-columns: 52px 1fr; align-items: center; gap: 14px; background: var(--white);
+    border-radius: 16px; padding: clamp(14px, 2.2vw, 18px); box-shadow: 0 8px 26px rgba(0, 0, 0, .06);
+    font-family: var(--poppins); color: #0f0f11;
+  }
+  .reason:hover { box-shadow: 0 10px 34px rgba(0, 0, 0, .1); }
+  .reason-icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--smoke); }
+  .reason-icon img { width: 26px; height: 26px; object-fit: contain; }
+  .reason-text { font-weight: 900; text-transform: uppercase; letter-spacing: .6px; line-height: 1.25; font-size: clamp(15px, 1.2vw + .2rem, 18px); }
+  /* Rise-in on scroll; only hidden once the script has confirmed it can reveal them */
+  .rise-ready .reason { opacity: 0; transform: translateY(16px) scale(.98); }
+  .rise-ready .reason.is-in { animation: rise .7s cubic-bezier(.2, .9, .2, 1) forwards; animation-delay: var(--delay); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .btn-wide-rounded {
+    width: 100%; margin-top: 30px; background: var(--black); color: var(--white); border: 2px solid var(--white);
+    border-radius: 15px; font-size: 20px; font-weight: 600; padding: 15px 20px;
+  }
+
+  .venues { background: var(--smoke); padding: 60px 0; }
+  .venues-title { font-family: var(--poppins); text-transform: uppercase; }
+  .venue-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1080px; margin: 40px auto 0; }
+  .venue-card { background: var(--white); border-radius: 20px; padding: 36px 30px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .venue-label { font-family: var(--open-sans); font-size: 18px; font-weight: 400; letter-spacing: 2px; }
+  .venue-card-logo { width: auto; max-width: 300px; height: 90px; object-fit: contain; margin: 16px 0; }
+  .venue-card-text { font-family: var(--poppins); font-size: 16px; line-height: 1.3; max-width: 460px; flex: 1; }
+  .venue-map { width: 100%; max-width: 400px; height: 300px; border: 0; margin: 28px 0 34px; }
+  .btn-read { background: var(--black); color: var(--white); border: 2px solid var(--white); border-radius: 15px; font-size: 20px; font-weight: 600; padding: 15px 20px; width: 266px; max-width: 100%; }
+
+  .group { background: var(--white); padding: 40px 0; }
+  .group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
+  .group-copy { text-align: center; max-width: 560px; justify-self: center; }
+  .group-copy h2 { font-family: var(--poppins); font-size: 33px; font-weight: 900; line-height: 1.3; }
+  .group-copy p { font-family: var(--poppins); font-size: 15px; line-height: 1.3; margin-top: 20px; }
+  .stickmen { display: flex; gap: 20px; justify-content: center; }
+  .stickman { width: 100px; height: 100px; object-fit: contain; filter: brightness(0); opacity: 0; transform: scale(.9); transition: opacity .25s ease, transform .25s ease; }
+  .stickman.visible { opacity: 1; transform: none; }
+
+  .ip-divider { background: var(--smoke); padding: 36px 0; }
+  .ip-divider hr { border: 0; border-top: 1px solid #d9d9d9; margin: 0; }
+
+  @media (max-width: 767px) {
+    .why-ip-title { font-size: 28px; }
+    .reasons { grid-template-columns: 1fr; }
+    .btn-wide-rounded, .btn-read { font-size: 17px; }
+    .venues-title { font-size: 30px; }
+    .venue-cards { grid-template-columns: 1fr; gap: 20px; }
+    .venue-card { padding: 28px 18px; }
+    .group-grid { grid-template-columns: 1fr; }
+    .group-copy h2 { font-size: 26px; }
+    .stickmen { gap: 12px; }
+    .stickman { width: 64px; height: 64px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rise-ready .reason { opacity: 1; transform: none; animation: none !important; }
+  }
+</style>
+
+<script>
+  // Reason cards rise in as they scroll into view.
+  const list = document.querySelector('[data-rise]');
+  if (list && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    list.classList.add('rise-ready');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { threshold: 0.25 });
+    list.querySelectorAll('.reason').forEach((el) => io.observe(el));
+  }
+
+  // Stick figures: 1, 2, 3, 4 people, then back to 1, a step a second.
+  const men = [...document.querySelectorAll('[data-stickmen] .stickman')];
+  if (men.length) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      men.forEach((m) => m.classList.add('visible'));
+    } else {
+      let n = 1;
+      setInterval(() => {
+        n = n === men.length ? 1 : n + 1;
+        men.forEach((m, i) => m.classList.toggle('visible', i < n));
+      }, 1000);
+    }
+  }
+</script>
