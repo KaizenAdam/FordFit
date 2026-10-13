@@ -1,0 +1,21 @@
+---
+// Google reviews widget on a full-width band, optionally over one of the silk background videos.
+import ReviewWidget from './ReviewWidget.astro';
+const { video, widgetId, bg = 'var(--white)', id } = Astro.props;
+---
+<section class="reviews-band" id={id} style={`background:${bg}`}>
+  {video && (
+    <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster={`/assets/img/${video}-poster.webp`} aria-hidden="true">
+      <source src={`/assets/video/${video}.mp4`} type="video/mp4" />
+    </video>
+  )}
+  <div class="container">
+    <div class="review-widget"><ReviewWidget widgetId={widgetId} /></div>
+  </div>
+</section>
+
+<style>
+  .reviews-band { position: relative; overflow: hidden; padding: 60px 0; }
+  .reviews-band .container { position: relative; z-index: 1; }
+  @media (max-width: 767px) { .reviews-band { padding: 30px 0; } }
+</style>

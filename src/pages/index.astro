@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import ReviewWidget from '../components/ReviewWidget.astro';
+import AppPopup from '../components/AppPopup.astro';
 import { START_URL } from '../site.js';
 
 // TODO: the saved GHL page had no <title> or meta description. Copy them from the GHL
@@ -172,6 +173,7 @@ const faqs = [
       <div class="faq-cta"><a class="btn btn-black" href={START_URL}>START YOUR JOURNEY</a></div>
     </div>
   </section>
+  <AppPopup />
 </Base>
 
 <script>

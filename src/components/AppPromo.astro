@@ -1,0 +1,53 @@
+---
+// "FordFit app" band: text and button on the left, the phones video on the right.
+// `lines` are the big heading's lines. `font` picks the heading face each GHL page used.
+const {
+  kicker,
+  lines,
+  text,
+  cta = 'START ONLINE COACHING',
+  href = '/online-coaching',
+  font = 'poppins',
+  size = 65,
+  bodyFont = 'open-sans',
+} = Astro.props;
+---
+<section class="app-section">
+  <div class="container app">
+    <div class="app-copy">
+      <p class:list={['app-kicker', bodyFont]}>{kicker}</p>
+      <h2 class:list={['app-title', font]} style={`--size:${size}px`}>
+        {lines.map((l) => <span>{l}</span>)}
+      </h2>
+      <p class:list={['app-text', bodyFont]}>{text}</p>
+      <a class="btn btn-black btn-app" href={href}>{cta}</a>
+    </div>
+    <div class="app-media">
+      <video autoplay muted loop playsinline preload="metadata" poster="/assets/img/fordfit-app-poster.webp" aria-label="The FordFit app on three phones">
+        <source src="/assets/video/fordfit-app.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</section>
+
+<style>
+  .app-section { background: var(--smoke); padding: 50px 0; }
+  .app { display: grid; grid-template-columns: minmax(0, 640px) 1fr; gap: 20px; align-items: center; }
+  .app-kicker { font-size: 13px; font-weight: 300; line-height: 26px; letter-spacing: 3px; text-transform: uppercase; color: #8893a8; }
+  .app-title { font-size: var(--size); font-weight: 700; line-height: 1.1; letter-spacing: -1px; margin: 10px 0 20px; display: flex; flex-direction: column; text-wrap: balance; }
+  .app-text { font-size: 18px; font-weight: 300; line-height: 1.5; color: #8893a8; max-width: 626px; }
+  .poppins { font-family: var(--poppins); }
+  .open-sans { font-family: var(--open-sans); }
+  .inter { font-family: 'Inter', var(--open-sans); }
+  .app-text.inter { font-size: 20px; }
+  .btn-app { margin-top: 20px; font-size: 16px; font-weight: 700; letter-spacing: 2px; padding: 20px 36px; border-radius: 4px; }
+  .app-media { height: 500px; }
+  .app-media video { width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 767px) {
+    .app-section { padding: 40px 0; }
+    .app { grid-template-columns: 1fr; }
+    .app-title { font-size: min(var(--size), 44px); }
+    .app-text, .app-text.inter { font-size: 17px; }
+    .app-media { height: 360px; }
+  }
+</style>

@@ -1,0 +1,123 @@
+---
+// Six-card story gallery (GHL custom code): rotates every 6.5s, click a card to jump.
+// `blurred` is the Online Coaching version: blurred, with a "CLICK HERE" link to the About page.
+import { STORY } from '../data/story.js';
+
+const { images, blurred = false, headingTag = 'h3' } = Astro.props;
+const story = STORY.map((s, i) => ({ ...s, img: images[i] }));
+const last = story.length - 1;
+const Heading = headingTag;
+---
+<div class:list={['story', { 'story-blurred': blurred }]}>
+  <div class="ff-about-gallery" data-story inert={blurred}>
+    <div class="ff-gallery-track">
+      {story.map((s, i) => (
+        <button
+          type="button"
+          class:list={['ff-card', { 'is-active': i === 0, 'pos-right': i === 1, 'pos-left': i === last }]}
+          data-title={s.title}
+          data-body={s.body}
+          aria-label={s.title}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+        >
+          <img src={s.img} alt="" width="480" height="600" loading="lazy" />
+        </button>
+      ))}
+    </div>
+    <div class="ff-about-text" aria-live="polite">
+      <Heading class="ff-about-title">{story[0].title}</Heading>
+      <p class="ff-about-body">{story[0].body}</p>
+    </div>
+  </div>
+  {blurred && <a class="story-cta" href="/about-me">CLICK HERE</a>}
+</div>
+
+<style>
+  .story { position: relative; }
+  .ff-about-gallery { font-family: var(--poppins); width: min(1100px, 100%); margin: 0 auto; text-align: center; }
+  .ff-gallery-track { position: relative; display: flex; justify-content: center; gap: 28px; padding: 30px 0 10px; }
+  .ff-card {
+    flex: none; width: 180px; height: 240px; padding: 0; border-radius: 22px; overflow: hidden; background: #111;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, .25); cursor: pointer; position: relative;
+    transition: transform 320ms ease, opacity 320ms ease, filter 320ms ease;
+  }
+  .ff-card img { width: 100%; height: 100%; object-fit: cover; }
+  .ff-card:not(.is-active) { opacity: .55; filter: saturate(.6); }
+  .ff-card.is-active { transform: translateY(-14px) scale(1.05); opacity: 1; filter: none; z-index: 3; }
+  .ff-card.pos-left { transform: rotate(-7deg) translateY(6px); }
+  .ff-card.pos-right { transform: rotate(7deg) translateY(6px); }
+  .ff-about-text { max-width: 620px; margin: 26px auto 0; min-height: 150px; transition: opacity 220ms ease; }
+  .ff-about-text.is-fading { opacity: 0; }
+  .ff-about-title { font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; margin-bottom: 8px; }
+  .ff-about-body { font-size: 1rem; line-height: 1.6; }
+
+  .story-blurred { border-radius: 22px; overflow: hidden; isolation: isolate; }
+  .story-blurred .ff-about-gallery { filter: blur(6px); user-select: none; }
+  .story-blurred .ff-gallery-track { gap: 12px; }
+  .story-blurred .ff-card { width: 165px; height: 230px; }
+  .story-cta {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;
+    font-family: var(--poppins); font-weight: 600; font-size: 1rem; color: var(--white); background: var(--black);
+    padding: 12px 32px; border-radius: 16px; text-decoration: none;
+    opacity: 0; transition: opacity .2s ease, transform .2s ease;
+  }
+  .story-blurred:hover .story-cta, .story-cta:focus-visible { opacity: 1; transform: translate(-50%, -50%) scale(1.02); }
+  /* No hover on touch screens, so the link is always shown there */
+  @media (hover: none) { .story-cta { opacity: 1; } }
+
+  /* Six cards stop fitting: scroll the row instead of spilling off the page */
+  @media (max-width: 1100px) {
+    .ff-gallery-track { overflow-x: auto; scroll-snap-type: x mandatory; justify-content: flex-start; padding: 30px 20px 40px; scrollbar-width: none; }
+    .ff-gallery-track::-webkit-scrollbar { display: none; }
+    .ff-card { scroll-snap-align: center; }
+  }
+  @media (max-width: 767px) {
+    .ff-gallery-track { gap: 18px; padding: 20px 20px 40px; }
+    .ff-card { flex: 0 0 70%; width: auto; height: 280px; border-radius: 24px; transform: none !important; }
+    .ff-about-text { padding: 0 10px; }
+    .ff-about-title { font-size: 1.2rem; }
+    .ff-about-body { font-size: .95rem; }
+    .story-cta { padding: 10px 26px; font-size: .95rem; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-story]').forEach((root) => {
+    const track = root.querySelector('.ff-gallery-track');
+    const cards = [...root.querySelectorAll('.ff-card')];
+    const text = root.querySelector('.ff-about-text');
+    const titleEl = root.querySelector('.ff-about-title');
+    const bodyEl = root.querySelector('.ff-about-body');
+    const n = cards.length;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scrolling = matchMedia('(max-width: 1100px)');
+    let active = 0;
+    let timer;
+
+    const setActive = (i) => {
+      active = i;
+      cards.forEach((c, j) => {
+        c.classList.toggle('is-active', j === i);
+        c.classList.toggle('pos-left', j === (i - 1 + n) % n);
+        c.classList.toggle('pos-right', j === (i + 1) % n);
+        c.setAttribute('aria-pressed', String(j === i));
+      });
+      text.classList.add('is-fading');
+      setTimeout(() => {
+        titleEl.textContent = cards[i].dataset.title;
+        bodyEl.textContent = cards[i].dataset.body;
+        text.classList.remove('is-fading');
+      }, 180);
+      if (scrolling.matches) {
+        const c = cards[i];
+        track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.clientWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
+      }
+    };
+    const start = () => {
+      clearInterval(timer);
+      if (!reduced) timer = setInterval(() => setActive((active + 1) % n), 6500);
+    };
+    cards.forEach((c, i) => c.addEventListener('click', () => { setActive(i); start(); }));
+    start();
+  });
+</script>

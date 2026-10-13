@@ -386,24 +386,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .notfound { background: var(--smoke); padding: 100px 0 120px; text-align: center; }
 .notfound .faq-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-/* ---------- About: story gallery ---------- */
+/* ---------- About ---------- */
 .about-intro { background: var(--smoke); padding: 30px 0 40px; }
-.ff-about-gallery { font-family: var(--poppins); width: min(1100px, 100%); margin: 0 auto; text-align: center; }
-.ff-gallery-track { position: relative; display: flex; justify-content: center; gap: 28px; padding: 30px 0 10px; }
-.ff-card {
-  flex: none; width: 180px; height: 240px; padding: 0; border-radius: 22px; overflow: hidden; background: #111;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, .25); cursor: pointer; position: relative;
-  transition: transform 320ms ease, opacity 320ms ease, filter 320ms ease;
-}
-.ff-card img { width: 100%; height: 100%; object-fit: cover; }
-.ff-card:not(.is-active) { opacity: .55; filter: saturate(.6); }
-.ff-card.is-active { transform: translateY(-14px) scale(1.05); opacity: 1; filter: none; z-index: 3; }
-.ff-card.pos-left { transform: rotate(-7deg) translateY(6px); }
-.ff-card.pos-right { transform: rotate(7deg) translateY(6px); }
-.ff-about-text { max-width: 620px; margin: 26px auto 0; min-height: 150px; transition: opacity 220ms ease; }
-.ff-about-text.is-fading { opacity: 0; }
-.ff-about-title { font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; margin-bottom: 8px; }
-.ff-about-body { font-size: 1rem; line-height: 1.6; }
 .about-cta { text-align: center; margin-top: 20px; }
 .about-cta .btn { width: min(550px, 100%); font-size: 20px; font-weight: 600; padding: 15px 20px; border-radius: 8px; }
 
@@ -413,43 +397,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .proof-title { font-family: var(--poppins); font-size: 48px; font-weight: 700; line-height: 1.3; text-align: center; }
 .proof-intro { font-family: var(--poppins); font-size: 18px; line-height: 1.3; text-align: center; max-width: 1140px; margin: 6px auto 30px; }
 
-/* ---------- About: app ---------- */
-.app-section { background: var(--smoke); padding: 50px 0 40px; }
-.app { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
-.app-kicker {
-  font-family: 'Inter', var(--open-sans); font-size: 13px; line-height: 26px; letter-spacing: 3px; color: #8893a8;
-}
-.app-title { font-family: var(--poppins); font-size: 72px; font-weight: 700; line-height: 1.1; letter-spacing: -1px; margin: 10px 0 30px; max-width: 560px; }
-.app-text { font-family: 'Inter', var(--open-sans); font-size: 20px; font-weight: 300; line-height: 1.5; color: #8893a8; max-width: 575px; }
-.btn-app { margin-top: 30px; font-size: 16px; font-weight: 700; letter-spacing: 2px; padding: 20px 30px; }
-.app-media { height: 500px; }
-.app-media video { width: 100%; height: 100%; object-fit: cover; }
-
-/* Six cards no longer fit: scroll the row instead of letting it spill off the page */
-@media (max-width: 1100px) {
-  .ff-gallery-track {
-    overflow-x: auto; scroll-snap-type: x mandatory; justify-content: flex-start;
-    padding: 30px 20px 40px; scrollbar-width: none;
-  }
-  .ff-gallery-track::-webkit-scrollbar { display: none; }
-  .ff-card { scroll-snap-align: center; }
-}
-
 @media (max-width: 767px) {
-  .ff-gallery-track {
-    overflow-x: auto; scroll-snap-type: x mandatory; justify-content: flex-start; gap: 18px;
-    padding: 20px 20px 40px; scrollbar-width: none;
-  }
-  .ff-gallery-track::-webkit-scrollbar { display: none; }
-  .ff-card { flex: 0 0 70%; width: auto; height: 280px; border-radius: 24px; scroll-snap-align: center; transform: none !important; }
-  .ff-about-text { padding: 0 10px; }
-  .ff-about-title { font-size: 1.2rem; }
-  .ff-about-body { font-size: .95rem; }
   .about-cta .btn { font-size: 17px; }
   .proof-title { font-size: 30px; }
   .proof-intro { font-size: 15px; }
-  .app { grid-template-columns: 1fr; }
-  .app-media { height: 360px; }
-  .app-title { font-size: 44px; }
-  .app-text { font-size: 17px; }
 }

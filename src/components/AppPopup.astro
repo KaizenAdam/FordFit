@@ -1,0 +1,48 @@
+---
+// "7 day free trial" popup with the FordFit App form. Opens 8 seconds after the page loads,
+// once per visit, as on GHL.
+import GhlForm from './GhlForm.astro';
+---
+<dialog class="popup" id="app-popup" aria-labelledby="popup-title">
+  <button type="button" class="popup-close" aria-label="Close" data-close>&times;</button>
+  <div class="popup-head">
+    <img src="/assets/img/fordfit-icon.png" alt="" width="120" height="120" />
+    <div>
+      <h2 id="popup-title">7 DAY FREE TRIAL</h2>
+      <p>Get access to the FordFit App - track your workouts, meals, habits and more!</p>
+    </div>
+  </div>
+  <GhlForm id="wxh7LzL87X8105QmJ1ZY" name="FORDFIT App Pop Up" height={492} data-cookie-consent="true" data-cookie-consent-provider="auto" />
+</dialog>
+
+<style>
+  .popup {
+    width: min(720px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 20px; margin: 20px auto auto;
+    background: var(--white); border: 10px solid #cbd5e0;
+  }
+  .popup::backdrop { background: rgba(0, 0, 0, .5); }
+  .popup-close { position: absolute; top: 6px; right: 12px; font-size: 32px; line-height: 1; padding: 4px; }
+  .popup-head { display: grid; grid-template-columns: 27.6% 1fr; align-items: center; gap: 10px; text-align: center; }
+  .popup-head img { width: 100%; max-width: 160px; height: auto; margin: 0 auto; }
+  .popup-head h2 { font-family: var(--open-sans); font-size: 48px; font-weight: 700; line-height: 1.3; }
+  .popup-head p { font-family: var(--open-sans); font-size: 18px; line-height: 1.3; padding: 10px 0; }
+  @media (max-width: 480px) {
+    .popup-head h2 { font-size: 30px; }
+    .popup-head p { font-size: 13px; padding: 0; }
+  }
+</style>
+
+<script>
+  const popup = document.getElementById('app-popup');
+  const KEY = 'ff-app-popup-seen';
+  let seen = false;
+  try { seen = sessionStorage.getItem(KEY) === '1'; } catch {}
+  if (popup && !seen) {
+    setTimeout(() => {
+      popup.showModal();
+      try { sessionStorage.setItem(KEY, '1'); } catch {}
+    }, 8000);
+  }
+  popup?.querySelector('[data-close]')?.addEventListener('click', () => popup.close());
+  popup?.addEventListener('click', (e) => { if (e.target === popup) popup.close(); });
+</script>

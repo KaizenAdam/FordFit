@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+import LogoStrip from '../components/LogoStrip.astro';
+import ReviewsBand from '../components/ReviewsBand.astro';
+import AppPromo from '../components/AppPromo.astro';
+import { START_URL } from '../site.js';
+
+const clients = [
+  { img: '/assets/img/client-celia.webp', alt: 'Home personal training session with a baby close by', name: 'Celia', text: 'recently had her baby and found it much easier switching to Home & Mobile PT – Toby comes to her, bringing everything she needs so she can train comfortably without leaving the house.' },
+  { img: '/assets/img/client-jeremy.webp', alt: 'Personal training session in a home garage gym', name: 'Jeremy', text: 'prefers training in his own garage – with Toby’s mobile kit and equipment he gets a proper gym-quality session without ever leaving home.' },
+];
+---
+<Base
+  title="Home & Mobile Personal Training | FordFit At-Home Coaching"
+  description="Train at home with Mobile Personal Training. Toby brings the equipment to you for tailored 1-to-1 sessions designed to build strength and consistency."
+>
+  <section class="hm-hero">
+    <div class="container">
+      <div class="hm-box">
+        <p class="hm-kicker">A flexible PT service that fits around your life</p>
+        <h1 class="hm-title">HOME &amp; MOBILE PERSONAL TRAINING WITH FORDFIT</h1>
+        <p class="hm-text">Train with FordFit at home, outdoors, or wherever suits you best. Toby brings a <strong>full van of equipment, expert coaching, and a supportive approach</strong> straight to your door across the East of England. Every session is tailored to your goals, with in-person support plus access to the FordFit App for progress tracking, nutrition guidance, and extra accountability between sessions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="container">
+      <h2 class="why-title">WHY CLIENTS CHOOSE HOME AND MOBILE PT</h2>
+      <p class="why-sub">Train in a way that works for your life — with personalised support right where you feel most comfortable.</p>
+      <div class="pt-track" data-pt>
+        {clients.map((c, i) => (
+          <div class="pt-item">
+            <div class:list={['pt-card', { active: i === 0 }]}><img src={c.img} alt={c.alt} width="840" height="1050" loading="lazy" /></div>
+            <p class:list={['pt-text', { active: i === 0 }]}><strong>{c.name}</strong> {c.text}</p>
+          </div>
+        ))}
+      </div>
+      <div class="why-cta"><a class="btn btn-black btn-solid" href={START_URL}>START YOUR TRANSFORMATION</a></div>
+    </div>
+  </section>
+
+  <LogoStrip logos={[{ src: '/assets/img/van-icon.png' }, { src: '/assets/img/fordfit-icon-white.webp' }]} />
+
+  <section class="hm-price">
+    <div class="container">
+      <h2 class="hm-price-title">FLEXIBLE PRICING TAILORED TO YOUR LOCATION FROM</h2>
+      <p class="hm-price-figure" data-count="45" data-prefix="£">£45</p>
+      <p class="hm-price-label">Per session</p>
+      <p class="hm-price-text">Home &amp; Mobile PT involves travel, equipment transport, and session setup — so pricing varies depending on where you are and how often you’d like to train. Send an enquiry with your postcode and goals, and Toby will provide a personalised quote built around your schedule and needs.</p>
+      <a class="btn btn-black btn-solid" href={START_URL}>ENQUIRE HERE</a>
+    </div>
+  </section>
+
+  <ReviewsBand id="reviews" widgetId="68fb40c9a3dea7f0faafbf77" />
+
+  <AppPromo
+    kicker="Online Coaching Through the FordFit App"
+    lines={['WANT TO TRAIN AT', 'HOME WITHOUT', 'THE VISIT?']}
+    font="open-sans"
+    text="FordFit Online Coaching gives you the freedom to train on your terms. Get custom workouts, tailored nutrition, and real accountability through the FordFit App — no gym, no commute, and no need for anyone to come over."
+  />
+</Base>
+
+<style>
+  .hm-hero { background: var(--smoke); padding: 20px 0; }
+  .hm-box { border: 2px solid var(--black); border-radius: 20px; padding: 40px 50px; text-align: center; }
+  .hm-kicker { font-family: var(--open-sans); font-size: 16px; line-height: 1.3; letter-spacing: 2px; text-transform: uppercase; }
+  .hm-title { font-family: var(--poppins); font-size: 36px; font-weight: 700; line-height: 1.3; margin: 14px 0; text-wrap: balance; }
+  .hm-text { font-family: var(--open-sans); font-size: 16px; line-height: 1.3; max-width: 1040px; margin: 0 auto; }
+
+  .why { background: var(--white); padding: 40px 0 50px; text-align: center; }
+  .why-title { font-family: var(--poppins); font-size: 48px; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+  .why-sub { font-family: var(--poppins); font-size: 16px; line-height: 1.3; margin-top: 14px; }
+  .pt-track { display: flex; justify-content: center; gap: clamp(30px, 8vw, 120px); margin: 50px 0; }
+  .pt-item { flex: 0 1 420px; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+  .pt-card { width: 100%; max-width: 420px; aspect-ratio: 4 / 5; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, .25); }
+  .pt-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+  .pt-card.active img { transform: scale(1.05); }
+  .pt-text { font-family: var(--poppins); font-size: 16px; line-height: 1.5; max-width: 420px; margin-top: 18px; opacity: 0; transition: opacity .35s ease; }
+  .pt-text.active { opacity: 1; }
+  .btn-solid { font-size: 16px; font-weight: 700; padding: 20px 40px; border-radius: 5px; }
+  .why-cta .btn-solid { min-width: min(430px, 100%); }
+
+  .hm-price { background: var(--smoke); padding: 40px 0; text-align: center; }
+  .hm-price-title { font-family: var(--poppins); font-size: 35px; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+  .hm-price-figure { font-family: var(--poppins); font-size: 100px; font-weight: 700; line-height: 1.2; margin-top: 20px; font-variant-numeric: tabular-nums; }
+  .hm-price-label { font-family: var(--open-sans); font-size: 15px; }
+  .hm-price-text { font-family: var(--poppins); font-size: 18px; line-height: 1.3; max-width: 1100px; margin: 22px auto 22px; }
+  .hm-price .btn-solid { min-width: 294px; }
+
+  @media (max-width: 768px) {
+    .hm-box { padding: 30px 18px; }
+    .hm-title { font-size: 26px; }
+    .why-title { font-size: 30px; }
+    .pt-track { justify-content: flex-start; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; margin: 40px 0; scrollbar-width: none; }
+    .pt-track::-webkit-scrollbar { display: none; }
+    .pt-item { flex: 0 0 80%; max-width: 320px; scroll-snap-align: center; margin: 0 auto; }
+    .pt-card { max-width: 260px; margin-top: 12px; }
+    .pt-text { font-size: 14px; max-width: 260px; opacity: 1; }
+    .hm-price-title { font-size: 26px; }
+    .hm-price-figure { font-size: 80px; }
+    .hm-price-text { font-size: 16px; }
+  }
+</style>
+
+<script>
+  // Desktop: hovering a photo shows its story; otherwise they swap every 10 seconds.
+  const items = [...document.querySelectorAll('[data-pt] .pt-item')];
+  if (items.length === 2) {
+    let active = 0;
+    let auto = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const set = (i) => {
+      active = i;
+      items.forEach((it, j) => {
+        it.querySelector('.pt-card').classList.toggle('active', j === i);
+        it.querySelector('.pt-text').classList.toggle('active', j === i);
+      });
+    };
+    items.forEach((it, i) => it.querySelector('.pt-card').addEventListener('mouseenter', () => { auto = false; set(i); }));
+    setInterval(() => { if (auto) set(active === 0 ? 1 : 0); }, 10000);
+  }
+</script>

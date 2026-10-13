@@ -1,0 +1,29 @@
+---
+// "Personal training across Norfolk" band: heading and copy on the left, pixel-swap photo on the right.
+import PixelSwap from './PixelSwap.astro';
+const { title, photo, photoAlt, size = 29, bodyFont = 'open-sans' } = Astro.props;
+---
+<section class="norfolk">
+  <div class="container norfolk-grid">
+    <div class="norfolk-copy">
+      <h2 style={`font-size:${size}px`}>{title}</h2>
+      <p class={bodyFont}><slot /></p>
+    </div>
+    <PixelSwap src={photo} alt={photoAlt} />
+  </div>
+</section>
+
+<style>
+  .norfolk { background: var(--smoke); padding: 40px 0; }
+  .norfolk-grid { display: grid; grid-template-columns: 1fr 380px; gap: 30px; align-items: center; }
+  .norfolk-copy { text-align: center; max-width: 720px; justify-self: center; }
+  .norfolk-copy h2 { font-family: var(--poppins); font-weight: 700; line-height: 1.3; text-transform: uppercase; text-wrap: balance; }
+  .norfolk-copy p { font-size: 18px; line-height: 1.3; margin-top: 20px; }
+  .open-sans { font-family: var(--open-sans); }
+  .poppins { font-family: var(--poppins); font-size: 19px !important; }
+  @media (max-width: 767px) {
+    .norfolk-grid { grid-template-columns: 1fr; }
+    .norfolk-copy h2 { font-size: 24px !important; }
+    .norfolk-copy p, .poppins { font-size: 16px !important; }
+  }
+</style>

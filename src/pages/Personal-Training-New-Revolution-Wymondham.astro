@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import VenueHero from '../components/VenueHero.astro';
+import Community from '../components/Community.astro';
+import SwipeStack from '../components/SwipeStack.astro';
+import PricingTiers from '../components/PricingTiers.astro';
+import LogoStrip from '../components/LogoStrip.astro';
+import NorfolkBand from '../components/NorfolkBand.astro';
+import ReviewsBand from '../components/ReviewsBand.astro';
+import AppPromo from '../components/AppPromo.astro';
+
+const family = [1, 2, 3, 4, 5, 6].map((n) => `/assets/img/family-${n}.webp`);
+---
+<Base
+  title="Personal Trainer in Wymondham | FordFit Coaching"
+  description="Train with FordFit at New Revolution Health & Fitness in Wymondham. Tailored 1-to-1 personal training and weekly coaching designed around your goals."
+>
+  <VenueHero
+    bg="/assets/img/hero-wymondham.webp"
+    bgMobile="/assets/img/hero-wymondham-mobile.webp"
+    logo="/assets/img/nr-logo.webp"
+    logoAlt="New Revolution Health & Fitness Club"
+    kicker="A focused gym environment designed to bring out your best."
+    title="Personal Training in Wymondham"
+  >
+    Train with FordFit at <strong>New Revolutions Health &amp; Fitness Wymondham</strong>, where expert coaching meets a motivating gym environment. Every session is tailored to your goals — from fat loss and muscle building to improving overall fitness. You’ll get full in person support as well as access to the <strong>FordFit App</strong> for progress tracking and personalised nutrition advice to keep you on track inside and outside the gym.
+  </VenueHero>
+
+  <Community
+    video="silk-3"
+    size={33}
+    title="Swipe to See the FordFit Family"
+    text="Every swipe tells a story from the FordFit community. From first sessions to milestone moments, our clients push limits together and celebrate every win — no matter how big or small."
+  >
+    <div slot="media"><SwipeStack images={family} /></div>
+  </Community>
+
+  <PricingTiers
+    accent="#37ca37"
+    intro="Choose the level of support that suits your goals — from single PT sessions at New Revolution Fitness to structured weekly coaching that helps you stay accountable and see lasting progress."
+  />
+
+  <LogoStrip logos={[{ src: '/assets/img/nr-logo.webp' }, { src: '/assets/img/fordfit-icon-white.webp' }]} />
+
+  <NorfolkBand
+    title="Personal Training in Norfolk — Long Stratton, Wymondham & Beyond"
+    photo="/assets/img/pixel-wymondham.webp"
+    photoAlt="FordFit hoodie in the gym"
+    size={31}
+    bodyFont="poppins"
+  >
+    FordFit Personal Training works with clients across Norfolk, including Long Stratton and Wymondham, delivering tailored coaching that fits every lifestyle. Whether you train in-person or through the FordFit App, you’ll get a programme built around your goals, accountability to keep you consistent, and a community that motivates you to go further.
+  </NorfolkBand>
+
+  <ReviewsBand id="reviews" video="silk-1" widgetId="68fb40c9a3dea7f0faafbf77" />
+
+  <AppPromo
+    kicker="Online Coaching with the FordFit App"
+    lines={['IN PERSON NOT', 'YOUR THING?', 'TRAIN ANYWHERE.']}
+    font="open-sans"
+    text="If in-person training isn’t for you, the FordFit App brings expert coaching straight to your phone. Get custom workouts, nutrition support, and real accountability — wherever you train. Stay connected, stay consistent, and keep progressing on your own terms."
+  />
+</Base>

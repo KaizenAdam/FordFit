@@ -27,10 +27,20 @@ One-time setup in hPanel → Websites → fordfitpt.com → Advanced → **Git**
 
 ## Where things live
 
+- Pages: `src/pages/` (file names match the old GHL addresses)
+- Shared sections (gym banner, price table, logo strip, reviews band, app promo, story gallery,
+  photo swipe, pixel photo): `src/components/`
 - Shared details (phone, email, social links, service pages): `src/site.js`
-- Google reviews shown on the home page: `src/data/reviews.js`
-- Header / footer: `src/components/`
-- Styles: `src/styles/global.css`
+- Toby's story text (About and Online Coaching galleries): `src/data/story.js`
+- Styles shared across pages: `src/styles/global.css`; section styles live in each component
+
+## Still on GoHighLevel
+
+These are GHL embeds and stop working if the GHL account is closed:
+
+- Review widgets (`ReviewWidget.astro`, widget IDs set on each page)
+- Start Your Journey form "FORDFIT 1" (`start-your-journey-page.astro`)
+- Home page "7 day free trial" popup form (`AppPopup.astro`)
 
 Page URLs match the old GHL paths (`/about-me`, `/online-coaching`, …) so existing links and
 search rankings carry over.

@@ -1,0 +1,93 @@
+---
+// Bronze / Silver / Gold monthly packages (GHL pricing table). On phones the cards become a
+// swipeable row with a fourth card, the single session, as the GHL mobile version had.
+import { START_URL } from '../site.js';
+const { accent, ribbonText = '#fff', intro } = Astro.props;
+
+const common = ['Ongoing performance feedback', 'Tailored monthly plan updates', 'Personalised nutrition targets', 'App + Nutrition tracking dashboard'];
+const tiers = [
+  { name: 'Bronze Package', caption: 'Steady, consistent progress with ongoing accountability.', features: ['4× sessions per month', ...common], price: '£160', per: '/ month', cta: 'Select Bronze Package' },
+  { name: 'Silver Package', caption: 'Build momentum and results with consistent support.', features: ['8× sessions per month', ...common], price: '£260', per: '/ month', cta: 'Choose Silver', popular: true },
+  { name: 'Gold Package', caption: 'Maximum results with full accountability and expert guidance.', features: ['12× sessions per month', ...common], price: '£320', per: '/ month', cta: 'Go Gold' },
+  { name: 'Single PT Session', caption: 'Perfect for trying out FordFit or topping up your training.', features: ['1× 60-minute session', 'Expert technique advice', 'Intro session assessment'], price: '£45', per: '/ hour', cta: 'Book A Session', mobileOnly: true },
+];
+---
+<section class="tiers-section" style={`--accent:${accent};--ribbon-text:${ribbonText}`}>
+  <div class="container">
+    <p class="tiers-kicker">
+      GET <span class="accent">REWARDED</span> THE MORE YOU COMMIT - <em>THE <span class="accent">LESS</span> YOU PAY</em>
+    </p>
+    <h2 class="section-title">PERSONAL TRAINING THAT FITS YOUR LIFESTYLE</h2>
+    <p class="tiers-intro">{intro}</p>
+    <div class="tiers" data-tiers>
+      {tiers.map((t) => (
+        <article class:list={['tier', { 'tier-mobile': t.mobileOnly }]}>
+          {t.popular && <span class="ribbon">Most Popular</span>}
+          <h3>{t.name}</h3>
+          <p class="tier-caption">{t.caption}</p>
+          <ul>{t.features.map((f) => <li>{f}</li>)}</ul>
+          <p class="tier-price">{t.price} <span>{t.per}</span></p>
+          <a class="tier-btn" href={START_URL}>{t.cta}</a>
+        </article>
+      ))}
+    </div>
+    <div class="tier-dots" aria-hidden="true">{tiers.map((_, i) => <span aria-current={i === 0 ? 'true' : undefined} />)}</div>
+  </div>
+</section>
+
+<style>
+  .tiers-section { background: var(--smoke); padding: 60px 0 60px; }
+  .tiers-kicker {
+    font-family: var(--open-sans); font-size: 18px; font-weight: 500; line-height: 36px; letter-spacing: 2px;
+    text-transform: uppercase; text-align: center;
+  }
+  .accent { color: var(--accent); }
+  .tiers-intro { font-family: var(--poppins); font-size: 16px; line-height: 1.3; text-align: center; max-width: 800px; margin: 14px auto 0; }
+  .tiers { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1110px; margin: 48px auto 0; }
+  .tier {
+    position: relative; overflow: hidden; background: var(--white); border: 1px solid #e4e4e4; border-radius: 16px;
+    padding: 20px; text-align: center; display: flex; flex-direction: column; font-family: var(--poppins);
+  }
+  .tier-mobile { display: none; }
+  .tier h3 { font-size: 24px; font-weight: 700; line-height: 1.3; color: #111827; }
+  .tier-caption { font-size: 14px; line-height: 1.4; color: #6b7280; margin: 8px auto 0; max-width: 260px; min-height: 40px; }
+  .tier ul { margin: 18px 0 0; flex: 1; }
+  .tier li { font-size: 14px; line-height: 21px; color: #374151; padding: 12px 0; border-bottom: 1px solid #ececec; }
+  .tier li:last-child { border-bottom: 0; }
+  .tier-price { font-size: 40px; font-weight: 700; line-height: 1.2; color: #111827; margin: 24px 0; }
+  .tier-price span { font-size: 13px; font-weight: 400; }
+  .tier-btn {
+    display: block; background: var(--accent); color: var(--white); border-radius: 4px; padding: 13px 20px;
+    font-size: 16px; font-weight: 700; text-decoration: none; transition: opacity .2s ease;
+  }
+  .tier-btn:hover { opacity: .85; }
+  .ribbon {
+    position: absolute; top: 22px; right: -52px; width: 198px; transform: rotate(45deg); text-align: center;
+    background: var(--accent); color: var(--ribbon-text); font-size: 12px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; padding: 8px 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+  }
+  .tier-dots { display: none; }
+
+  @media (max-width: 900px) {
+    .tiers { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin-top: 30px; scrollbar-width: none; padding-bottom: 6px; }
+    .tiers::-webkit-scrollbar { display: none; }
+    .tier { flex: 0 0 min(320px, 86%); scroll-snap-align: center; }
+    .tier-mobile { display: flex; }
+    .tier-dots { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+    .tier-dots span { width: 8px; height: 8px; border-radius: 999px; background: rgba(0, 0, 0, .25); }
+    .tier-dots span[aria-current] { background: rgba(0, 0, 0, .75); }
+    .tiers-kicker { font-size: 14px; line-height: 1.6; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-tiers]').forEach((row) => {
+    const dots = [...row.parentElement.querySelectorAll('.tier-dots span')];
+    const cards = [...row.children];
+    row.addEventListener('scroll', () => {
+      const mid = row.scrollLeft + row.clientWidth / 2;
+      const i = cards.findIndex((c) => c.offsetLeft <= mid && c.offsetLeft + c.offsetWidth >= mid);
+      dots.forEach((d, j) => d.toggleAttribute('aria-current', j === i));
+    }, { passive: true });
+  });
+</script>

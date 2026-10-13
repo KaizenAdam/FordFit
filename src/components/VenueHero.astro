@@ -1,0 +1,37 @@
+---
+// Gym page banner: background photo, white-bordered box with the gym's logo and an intro.
+const { bg, bgMobile, logo, logoAlt, kicker, title, titleFont = 'poppins' } = Astro.props;
+---
+<section class="venue-hero" style={`--bg:url(${bg});--bg-m:url(${bgMobile})`}>
+  <div class="container">
+    <div class="venue-box">
+      <img class="venue-logo" src={logo} alt={logoAlt} width="300" height="200" />
+      <div class="venue-copy">
+        <p class="venue-kicker">{kicker}</p>
+        <h1 class:list={['venue-title', titleFont]}>{title}</h1>
+        <p class="venue-text"><slot /></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .venue-hero { background: #222 var(--bg) center / cover no-repeat; padding: 20px 0; }
+  .venue-box {
+    border: 2px solid var(--white); border-radius: 20px; color: var(--white); min-height: 292px;
+    display: grid; grid-template-columns: 360px 1fr; align-items: center; gap: 20px; padding: 30px 40px 30px 20px;
+  }
+  .venue-logo { width: 100%; max-width: 300px; height: auto; max-height: 190px; object-fit: contain; justify-self: center; }
+  .venue-kicker { font-family: var(--poppins); font-size: 16px; line-height: 1.3; letter-spacing: 1px; text-transform: uppercase; }
+  .venue-title { font-size: 36px; font-weight: 700; line-height: 1.3; text-transform: uppercase; margin: 12px 0 14px; }
+  .poppins { font-family: var(--poppins); }
+  .open-sans { font-family: var(--open-sans); }
+  .venue-text { font-family: var(--poppins); font-size: 16px; line-height: 1.3; max-width: 720px; }
+  @media (max-width: 767px) {
+    .venue-hero { background-image: var(--bg-m); }
+    .venue-box { grid-template-columns: 1fr; text-align: center; padding: 30px 18px; }
+    .venue-logo { max-width: 200px; max-height: 140px; }
+    .venue-title { font-size: 28px; }
+    .venue-text { font-size: 15px; }
+  }
+</style>

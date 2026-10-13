@@ -1,0 +1,19 @@
+---
+// Black strip of logos scrolling sideways (GHL logo slider).
+const { logos, width = 80 } = Astro.props; // logos: [{ src, alt }] — repeated to fill the strip
+const set = Array.from({ length: 6 }, () => logos).flat();
+---
+<div class="logo-strip" aria-hidden="true">
+  <div class="logo-track" style={`--w:${width}px`}>
+    {[...set, ...set].map((l) => <img src={l.src} alt="" width={width} height="18" loading="lazy" />)}
+  </div>
+</div>
+
+<style>
+  .logo-strip { background: var(--black); height: 110px; overflow: hidden; display: flex; align-items: center; }
+  .logo-track { display: flex; gap: 77px; padding-left: 77px; width: max-content; animation: logo-scroll 40s linear infinite; }
+  .logo-track img { width: var(--w); height: 64px; object-fit: contain; }
+  @keyframes logo-scroll { to { transform: translateX(-50%); } }
+  @media (max-width: 767px) { .logo-strip { height: 76px; } .logo-track { gap: 48px; } .logo-track img { width: 56px; height: 44px; } }
+  @media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
+</style>

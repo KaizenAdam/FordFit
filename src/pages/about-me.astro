@@ -1,76 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
 import ReviewWidget from '../components/ReviewWidget.astro';
+import StoryGallery from '../components/StoryGallery.astro';
+import AppPromo from '../components/AppPromo.astro';
 import { START_URL } from '../site.js';
 
-const title = 'About Toby Forder | FordFit Personal Trainer & Coach';
-const description =
-  'Learn about Toby Forder, the personal trainer behind FordFit. With tailored coaching and a results-driven approach.';
-
-// The six gallery cards. Clicking a card (or waiting) shows its story underneath.
-const story = [
-  {
-    img: '/assets/img/about-1.webp',
-    title: 'Toby, Founder of FordFit',
-    body: 'I’m Toby, founder of FordFit Personal Training — a 22-year-old personal trainer and online coach from Norwich, dedicated to helping people feel stronger, healthier, and more confident. I’m a Level 3 Qualified Personal Trainer and Level 2 Gym Instructor, and I’ve built FordFit to help clients across Norfolk and beyond achieve results that truly last.',
-  },
-  {
-    img: '/assets/img/about-2.webp',
-    title: 'A Lifelong Passion for Sport',
-    body: 'My passion for sport started early. I grew up playing football and getting involved in anything active. That competitive drive and love for movement shaped the way I coach today — helping people learn that progress comes from consistency and effort.',
-  },
-  {
-    img: '/assets/img/about-3.webp',
-    title: 'Why I Chose to Coach',
-    body: 'As I developed my own training, I realised how much I enjoyed helping others reach their goals too. Coaching became more than a job — it became something I wanted to do every day. I love teaching form, building confidence, and making training something people actually enjoy.',
-  },
-  {
-    img: '/assets/img/about-4.webp',
-    title: 'From Football to Hyrox-Style Events',
-    body: 'I’ve taken part in a range of fitness challenges over the years — from competitive football to more endurance-based, Hyrox-style events. That mix of strength, conditioning and athletic work is what I bring into my PT sessions so clients can move well and feel capable.',
-  },
-  {
-    img: '/assets/img/about-5.webp',
-    title: 'Fitness for Mind and Body',
-    body: 'Training isn’t just about how you look. It’s about better energy, less stress and feeling more confident in yourself. I’ve seen how much exercise can help mental health, and that’s a big part of how I coach — making fitness something that improves your whole lifestyle.',
-  },
-  {
-    img: '/assets/img/about-6.webp',
-    title: 'What FordFit Stands For',
-    body: 'FordFit was created to make personal training accessible, supportive and results-driven. Whether you train in person in Long Stratton or Wymondham, at home, or online through the FordFit App, my goal is always the same — keep you progressing, keep you accountable, and help you become stronger.',
-  },
-];
-const last = story.length - 1;
+const images = [1, 2, 3, 4, 5, 6].map((n) => `/assets/img/about-${n}.webp`);
 ---
-<Base title={title} description={description}>
-  <!-- Story gallery -->
+<Base
+  title="About Toby Forder | FordFit Personal Trainer & Coach"
+  description="Learn about Toby Forder, the personal trainer behind FordFit. With tailored coaching and a results-driven approach."
+>
   <section class="about-intro">
     <div class="container">
-      <div class="ff-about-gallery" data-about-gallery>
-        <div class="ff-gallery-track">
-          {story.map((s, i) => (
-            <button
-              type="button"
-              class:list={['ff-card', { 'is-active': i === 0, 'pos-right': i === 1, 'pos-left': i === last }]}
-              data-index={i}
-              data-title={s.title}
-              data-body={s.body}
-              aria-label={s.title}
-            >
-              <img src={s.img} alt="" width="480" height="600" loading={i < 3 ? 'eager' : 'lazy'} />
-            </button>
-          ))}
-        </div>
-        <div class="ff-about-text" aria-live="polite">
-          <h1 class="ff-about-title">{story[0].title}</h1>
-          <p class="ff-about-body">{story[0].body}</p>
-        </div>
-      </div>
+      <StoryGallery images={images} headingTag="h1" />
       <div class="about-cta"><a class="btn btn-black" href={START_URL}>MAKE. A. DIFFERENCE.</a></div>
     </div>
   </section>
 
-  <!-- Reviews -->
   <section class="proof-section">
     <div class="container">
       <p class="proof-kicker">NEED MORE CONVINCING?</p>
@@ -80,64 +27,13 @@ const last = story.length - 1;
     </div>
   </section>
 
-  <!-- FordFit app -->
-  <section class="app-section">
-    <div class="container app">
-      <div class="app-copy">
-        <p class="app-kicker">PERSONAL TRAINING MADE SIMPLE WITH THE FORDFIT APP</p>
-        <h2 class="app-title">PERSONAL TRAINING IN YOUR POCKET</h2>
-        <p class="app-text">The FordFit App brings your training, nutrition, and progress tracking together — helping you stay consistent whether you’re in the gym, at home, or on the go.</p>
-        <a class="btn btn-black btn-app" href={START_URL}>START YOUR JOURNEY</a>
-      </div>
-      <div class="app-media">
-        <video autoplay muted loop playsinline preload="metadata" poster="/assets/img/fordfit-app-poster.webp" aria-label="The FordFit app on three phones">
-          <source src="/assets/video/fordfit-app.mp4" type="video/mp4" />
-        </video>
-      </div>
-    </div>
-  </section>
+  <AppPromo
+    kicker="Personal Training Made Simple with the FordFit App"
+    lines={['PERSONAL', 'TRAINING IN', 'YOUR POCKET']}
+    size={72}
+    bodyFont="inter"
+    text="The FordFit App brings your training, nutrition, and progress tracking together — helping you stay consistent whether you’re in the gym, at home, or on the go."
+    cta="START YOUR JOURNEY"
+    href={START_URL}
+  />
 </Base>
-
-<script>
-  // Circular story gallery (the GHL custom code block): rotates every 6.5s, click to jump.
-  const root = document.querySelector('[data-about-gallery]');
-  if (root) {
-    const track = root.querySelector('.ff-gallery-track');
-    const cards = [...root.querySelectorAll('.ff-card')];
-    const text = root.querySelector('.ff-about-text');
-    const titleEl = root.querySelector('.ff-about-title');
-    const bodyEl = root.querySelector('.ff-about-body');
-    const n = cards.length;
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const mobile = matchMedia('(max-width: 1100px)');
-    let active = 0;
-    let timer;
-
-    const setActive = (i) => {
-      active = i;
-      cards.forEach((c, j) => {
-        c.classList.toggle('is-active', j === i);
-        c.classList.toggle('pos-left', j === (i - 1 + n) % n);
-        c.classList.toggle('pos-right', j === (i + 1) % n);
-        c.setAttribute('aria-pressed', String(j === i));
-      });
-      text.classList.add('is-fading');
-      setTimeout(() => {
-        titleEl.textContent = cards[i].dataset.title;
-        bodyEl.textContent = cards[i].dataset.body;
-        text.classList.remove('is-fading');
-      }, 180);
-      if (mobile.matches) {
-        const c = cards[i];
-        track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.clientWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
-      }
-    };
-    const start = () => {
-      clearInterval(timer);
-      if (!reduced) timer = setInterval(() => setActive((active + 1) % n), 6500);
-    };
-    cards.forEach((c, i) => c.addEventListener('click', () => { setActive(i); start(); }));
-    cards.forEach((c, j) => c.setAttribute('aria-pressed', String(j === 0)));
-    start();
-  }
-</script>

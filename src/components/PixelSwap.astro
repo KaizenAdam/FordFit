@@ -1,0 +1,31 @@
+---
+// Photo that dissolves tile by tile into the FordFit logo on hover (GHL custom code).
+const { src, alt = '' } = Astro.props;
+const GRID = 8;
+const tiles = [];
+for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) tiles.push({ x, y, delay: Math.round((x + y * 0.3) * 40) });
+---
+<div class="pixel" role="img" aria-label={alt}>
+  {tiles.map((t) => (
+    <span
+      class="pixel-tile"
+      style={`--x:${t.x};--y:${t.y};transition-delay:${t.delay}ms;background-image:url(${src})`}
+    />
+  ))}
+</div>
+
+<style>
+  .pixel {
+    --size: 300px; --grid: 8;
+    width: var(--size); height: var(--size); position: relative; border-radius: 12px; overflow: hidden; margin: 0 auto;
+    background: url('/assets/img/fordfit-icon-600.png') center / cover;
+  }
+  .pixel-tile {
+    position: absolute; width: calc(var(--size) / var(--grid)); height: calc(var(--size) / var(--grid));
+    left: calc(var(--x) * var(--size) / var(--grid)); top: calc(var(--y) * var(--size) / var(--grid));
+    background-size: var(--size) var(--size); background-repeat: no-repeat;
+    background-position: calc(var(--x) * var(--size) / var(--grid) * -1) calc(var(--y) * var(--size) / var(--grid) * -1);
+    transition: opacity .35s ease-out;
+  }
+  .pixel:hover .pixel-tile { opacity: 0; }
+</style>

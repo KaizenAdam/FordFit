@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import VenueHero from '../components/VenueHero.astro';
+import Community from '../components/Community.astro';
+import PricingTiers from '../components/PricingTiers.astro';
+import LogoStrip from '../components/LogoStrip.astro';
+import NorfolkBand from '../components/NorfolkBand.astro';
+import ReviewsBand from '../components/ReviewsBand.astro';
+import AppPromo from '../components/AppPromo.astro';
+---
+<Base
+  title="Personal Trainer in Long Stratton | FordFit Coaching"
+  description="Train with FordFit at South Norfolk Leisure Centre. Tailored 1-to-1 personal training, expert coaching and structured plans designed around your goals."
+>
+  <VenueHero
+    bg="/assets/img/hero-stratton.webp"
+    bgMobile="/assets/img/hero-stratton-mobile.webp"
+    logo="/assets/img/leisure-logo.webp"
+    logoAlt="South Norfolk Leisure"
+    kicker="A motivating gym space built to help you perform at your best."
+    title="Personal Training in Long Stratton"
+    titleFont="open-sans"
+  >
+    Train with FordFit at <strong>South Norfolk Leisure Centre in Long Stratton</strong>, where expert coaching and a supportive gym environment come together to help you reach your fitness goals. From strength and fat loss to overall wellbeing, every session is tailored to you. Get full in-person support plus access to the <strong>FordFit App</strong> for progress tracking, nutrition guidance, and extra accountability inside and outside the gym.
+  </VenueHero>
+
+  <Community
+    title="MEET THE FORDFIT COMMUNITY"
+    text="At FordFit, every transformation starts with commitment, consistency, and the right support. Our clients train hard, stay accountable, and achieve results that last — in the gym, at home, and online."
+  >
+    <video slot="media" class="f-video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/fordfit-f-poster.webp" aria-label="FordFit clients training, shown inside the FordFit logo">
+      <source src="/assets/video/fordfit-f.mp4" type="video/mp4" />
+    </video>
+  </Community>
+
+  <PricingTiers
+    accent="#10d2ff"
+    ribbonText="#000"
+    intro="Choose the level of support that suits your goals — from flexible one-off sessions at South Norfolk Leisure Centre to weekly personal training that keeps you consistent and motivated."
+  />
+
+  <LogoStrip logos={[{ src: '/assets/img/leisure-logo-small.webp' }, { src: '/assets/img/fordfit-icon-white.webp' }]} />
+
+  <NorfolkBand
+    title="Personal Training Across Norfolk — Long Stratton, Wymondham, Online & At Home"
+    photo="/assets/img/pixel-stratton.webp"
+    photoAlt="Toby stretching in the gym"
+  >
+    FordFit Personal Training supports clients across Norfolk with flexible coaching that fits around your lifestyle. Whether you train <strong>in-person at South Norfolk Leisure Centre in Long Stratton</strong>, <strong>at NR Fitness in Wymondham</strong>, <strong>from home with our mobile PT service</strong>, or <strong>online through the FordFit App</strong>, every plan is designed around your goals. You’ll get expert coaching, structured accountability, and a community that keeps you consistent — wherever you choose to train.
+  </NorfolkBand>
+
+  <ReviewsBand id="reviews" video="silk-2" widgetId="68fb40c9a3dea7f0faafbf77" />
+
+  <AppPromo
+    kicker="Online Coaching Through the FordFit App"
+    lines={['NO GYM?', 'NO PROBLEM.', 'TRAIN ANYWHERE.']}
+    text="If you prefer flexibility, FordFit Online Coaching gives you everything you need to stay on track — wherever you are. Access custom workout plans, tailored nutrition guidance, and real accountability directly through the FordFit App. Train on your schedule, stay consistent, and achieve lasting results from home, the gym, or on the go."
+  />
+</Base>
+
+<style>
+  .f-video { width: 100%; max-height: 300px; object-fit: contain; }
+</style>

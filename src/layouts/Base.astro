@@ -33,5 +33,26 @@ const canonical = new URL(Astro.url.pathname === '/index' ? '/' : Astro.url.path
       <slot />
     </main>
     <Footer />
+    <script>
+      // Count numbers up from 0 when they scroll into view ([data-count], with optional prefix/suffix).
+      const counters = document.querySelectorAll('[data-count]');
+      if (counters.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const run = (el) => {
+          const end = Number(el.dataset.count);
+          const fmt = (n) => (el.dataset.prefix || '') + n.toLocaleString('en-GB') + (el.dataset.suffix || '');
+          const t0 = performance.now();
+          const step = (t) => {
+            const k = Math.min(1, (t - t0) / 2000);
+            el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - k, 3))));
+            if (k < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        };
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { io.unobserve(e.target); run(e.target); } });
+        }, { threshold: 0.6 });
+        counters.forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>
