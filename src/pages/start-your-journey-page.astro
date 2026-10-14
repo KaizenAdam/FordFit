@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import GhlForm from '../components/GhlForm.astro';
+import LeadForm from '../components/LeadForm.astro';
 import ReviewWidget from '../components/ReviewWidget.astro';
 
 const strip = Array.from({ length: 11 }, (_, i) => `/assets/img/strip-${i + 1}.webp`);
@@ -15,8 +15,7 @@ const strip = Array.from({ length: 11 }, (_, i) => `/assets/img/strip-${i + 1}.w
       <p class="sj-sub">Once you fill out this form, Toby will get in touch to book your consultation and talk through the best plan for your goals.</p>
 
       <div class="sj-grid">
-        <!-- TODO: GHL form "FORDFIT 1". Replace with a FordFit-owned form before leaving GHL. -->
-        <div class="sj-form"><GhlForm id="jK35KKrVIRg2JpqscTv2" name="FORDFIT 1" height={560} /></div>
+        <div class="sj-form"><LeadForm form="journey" /></div>
         <div class="sj-reviews"><ReviewWidget widgetId="6917121c169c61da93d97ac0" /></div>
       </div>
 

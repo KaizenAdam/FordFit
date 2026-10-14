@@ -1,7 +1,7 @@
 ---
-// "7 day free trial" popup with the FordFit App form. Opens 8 seconds after the page loads,
+// "7 day free trial" popup with the free trial form. Opens 8 seconds after the page loads,
 // once per visit, as on GHL.
-import GhlForm from './GhlForm.astro';
+import LeadForm from './LeadForm.astro';
 ---
 <dialog class="popup" id="app-popup" aria-labelledby="popup-title">
   <button type="button" class="popup-close" aria-label="Close" data-close>&times;</button>
@@ -12,7 +12,7 @@ import GhlForm from './GhlForm.astro';
       <p>Get access to the FordFit App - track your workouts, meals, habits and more!</p>
     </div>
   </div>
-  <GhlForm id="wxh7LzL87X8105QmJ1ZY" name="FORDFIT App Pop Up" height={492} data-cookie-consent="true" data-cookie-consent-provider="auto" />
+  <LeadForm form="trial" />
 </dialog>
 
 <style>
@@ -37,7 +37,9 @@ import GhlForm from './GhlForm.astro';
   const KEY = 'ff-app-popup-seen';
   let seen = false;
   try { seen = sessionStorage.getItem(KEY) === '1'; } catch {}
-  if (popup && !seen) {
+  // Coming back from the no-JS form fallback: reopen so the thank-you (or error) shows.
+  if (popup && location.hash === '#trial-form') popup.showModal();
+  else if (popup && !seen) {
     setTimeout(() => {
       popup.showModal();
       try { sessionStorage.setItem(KEY, '1'); } catch {}

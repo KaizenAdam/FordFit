@@ -1,0 +1,143 @@
+---
+// Lead form posting to /api/contact.php, which emails Toby through Resend (replaces the GHL
+// forms). `form="journey"` is Start Your Journey (services checkboxes); `form="trial"` is the
+// 7 day free trial popup. Works without JavaScript too (normal POST, then redirect back).
+const { form = 'journey' } = Astro.props;
+const isTrial = form === 'trial';
+const id = `${form}-form`;
+const services = [
+  'Online Coaching',
+  'Personal Training - Long Stratton',
+  'Personal Training - Wymondham',
+  'Personal Training - Home and Mobile',
+];
+---
+<div class:list={['lead', { 'lead-trial': isTrial }]} id={id} data-lead>
+  <form action="/api/contact.php" method="post" novalidate>
+    <input type="hidden" name="form" value={form} />
+    <div class="lead-hp" aria-hidden="true">
+      <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <div class="lead-field">
+      <label for={`${id}-name`}>Full Name{isTrial && ' *'}</label>
+      <input id={`${id}-name`} name="name" type="text" placeholder="Full Name" autocomplete="name" maxlength="100" required={isTrial} />
+    </div>
+    <div class="lead-field">
+      <label for={`${id}-phone`}>Phone *</label>
+      <input id={`${id}-phone`} name="phone" type="tel" placeholder="Phone" autocomplete="tel" maxlength="40" required />
+    </div>
+    <div class="lead-field">
+      <label for={`${id}-email`}>Email *</label>
+      <input id={`${id}-email`} name="email" type="email" placeholder="Email" autocomplete="email" maxlength="200" required />
+    </div>
+
+    {!isTrial && (
+      <fieldset class="lead-field lead-services">
+        <legend>Service You Desire *</legend>
+        {services.map((s, i) => (
+          <label class="lead-option" for={`${id}-svc-${i}`}>
+            <input id={`${id}-svc-${i}`} type="checkbox" name="services[]" value={s} />
+            <span>{s}</span>
+          </label>
+        ))}
+      </fieldset>
+    )}
+
+    <p class="lead-error" role="alert" hidden></p>
+    <button type="submit" class="lead-submit">{isTrial ? 'GET STARTED' : 'SUBMIT'}</button>
+  </form>
+
+  <div class="lead-thanks" tabindex="-1" hidden>
+    {isTrial
+      ? <p><strong>THANK YOU!</strong><br /><br />Toby will be in touch to get you set up!</p>
+      : <p>Thank you for taking the time to complete this form.</p>}
+  </div>
+</div>
+
+<style>
+  .lead { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: #2c3345; padding: 30px 30px 24px; }
+  .lead-trial { padding: 10px 30px 20px; }
+  .lead-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .lead-field { margin: 0 0 16px; border: 0; padding: 0; min-width: 0; }
+  .lead-field label, .lead-field legend { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; padding: 0; }
+  .lead-field input[type='text'], .lead-field input[type='tel'], .lead-field input[type='email'] {
+    width: 100%; font: inherit; font-size: 14px; color: #2c3345; background: var(--white);
+    border: 1px solid #acacac; border-radius: 5px; padding: 8px 15px; min-height: 38px;
+  }
+  .lead-trial .lead-field input { border-color: var(--black); }
+  .lead-field input::placeholder { color: #8c8c8c; }
+  .lead-field input:focus-visible { outline: 2px solid #101828; outline-offset: 1px; }
+  .lead-field .lead-option {
+    display: flex; align-items: center; gap: 10px; width: 262px; max-width: 100%;
+    border: 1px solid #acacac; border-radius: 8px; padding: 9px 14px; margin: 0 0 8px;
+    font-size: 12px; font-weight: 300; color: #5a5a5a; cursor: pointer;
+  }
+  .lead-option input { width: 15px; height: 15px; margin: 0; flex: none; accent-color: #101828; }
+  .lead-field .lead-option:has(input:checked) { border-color: #101828; color: #101828; font-weight: 500; }
+  .lead-error { color: #b42318; font-size: 14px; margin: 0 0 12px; }
+  .lead-submit {
+    width: 100%; background: #101828; color: var(--white); border-radius: 8px; padding: 12px 20px; margin-top: 8px;
+    font-family: var(--poppins); font-size: 14px; font-weight: 500; letter-spacing: .5px; transition: opacity .2s ease;
+  }
+  .lead-submit:hover { opacity: .9; }
+  .lead-submit[disabled] { opacity: .6; cursor: progress; }
+  .lead-thanks { font-family: var(--poppins); font-size: 16px; line-height: 1.5; text-align: center; padding: 40px 10px; color: var(--black); }
+  .lead-thanks:focus { outline: none; }
+</style>
+
+<script>
+  document.querySelectorAll('[data-lead]').forEach((root) => {
+    const form = root.querySelector('form');
+    const error = root.querySelector('.lead-error');
+    const thanks = root.querySelector('.lead-thanks');
+    const button = root.querySelector('.lead-submit');
+    const label = button.textContent;
+    const isJourney = form.elements.form.value === 'journey';
+
+    const showError = (msg) => { error.textContent = msg; error.hidden = false; };
+    const done = () => { form.hidden = true; thanks.hidden = false; thanks.focus(); };
+
+    // No-JS fallback lands back here with ?sent=1 or ?error=1
+    const params = new URLSearchParams(location.search);
+    if (location.hash === `#${root.id}`) {
+      if (params.get('sent') === '1') done();
+      if (params.get('error') === '1') showError('Sorry - we couldn’t send that. Please email toby@fordfitpt.com or call 07495 141804 instead.');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.hidden = true;
+      const data = new FormData(form);
+      const services = data.getAll('services[]');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      if (isJourney && services.length === 0) {
+        showError('Please choose at least one service.');
+        return;
+      }
+      button.disabled = true;
+      button.textContent = 'SENDING…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            form: data.get('form'), website: data.get('website'), name: data.get('name'),
+            phone: data.get('phone'), email: data.get('email'), services,
+          }),
+        });
+        const out = await res.json().catch(() => ({}));
+        if (res.ok && out.ok) done();
+        else showError(out.error || 'Sorry - we couldn’t send that. Please email toby@fordfitpt.com or call 07495 141804 instead.');
+      } catch {
+        showError('Sorry - we couldn’t send that. Check your connection, or email toby@fordfitpt.com instead.');
+      } finally {
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,4 @@
+# Only contact.php is public. config.php (if it is ever placed here) holds the Resend key.
+<Files "config.php">
+  Require all denied
+</Files>

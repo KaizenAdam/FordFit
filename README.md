@@ -34,13 +34,25 @@ One-time setup in hPanel → Websites → fordfitpt.com → Advanced → **Git**
 - Toby's story text (About and Online Coaching galleries): `src/data/story.js`
 - Styles shared across pages: `src/styles/global.css`; section styles live in each component
 
+## Forms (Resend)
+
+Start Your Journey and the home page "7 day free trial" popup post to `public/api/contact.php`,
+which emails Toby through Resend (same setup as the tinyFIRES site) and sends the enquirer an
+auto-reply. Settings live in **`fordfit-config.php` in the hosting account's home folder**, one
+level above `public_html`, so the web can't read it and deploys never touch it. This repository
+is public: never commit the Resend key.
+
+One-time setup:
+
+1. Resend → Domains → add `send.fordfitpt.com` and add the DNS records it lists wherever
+   fordfitpt.com's DNS is managed. Wait until it shows Verified.
+2. Resend → API Keys → create a key with "Sending access" for that domain only.
+3. hPanel → File Manager → the home folder (the one containing `public_html`) → create
+   `fordfit-config.php` from `public/api/config.example.php` and paste the key.
+4. To test without emailing Toby, put your own address in `TEST_RECIPIENTS` in `contact.php`,
+   deploy, submit both forms, then set it back to `[]`.
+
 ## Still on GoHighLevel
 
-These are GHL embeds and stop working if the GHL account is closed:
-
-- Review widgets (`ReviewWidget.astro`, widget IDs set on each page)
-- Start Your Journey form "FORDFIT 1" (`start-your-journey-page.astro`)
-- Home page "7 day free trial" popup form (`AppPopup.astro`)
-
-Page URLs match the old GHL paths (`/about-me`, `/online-coaching`, …) so existing links and
-search rankings carry over.
+The review widgets (`ReviewWidget.astro`, widget IDs set on each page) are GHL Reputation
+embeds and stop working if the GHL account is closed.
