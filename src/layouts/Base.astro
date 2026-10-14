@@ -5,12 +5,12 @@ import '../styles/global.css';
 
 const { title, description } = Astro.props;
 
-// Site-wide head code from GHL: EmbedSocial review rating for Google results.
+// Review rating for Google results (both Google listings combined).
 const reviewsSchema = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: 'FordFit Personal Training-Norwich',
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: 5.0, reviewCount: 82 },
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: 5.0, reviewCount: 99 },
 };
 const canonical = new URL(Astro.url.pathname === '/index' ? '/' : Astro.url.pathname, Astro.site);
 ---
@@ -34,7 +34,6 @@ const canonical = new URL(Astro.url.pathname === '/index' ? '/' : Astro.url.path
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Open+Sans:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" />
     <script type="application/ld+json" class="reviews-schema" data-ref="ccc96bb890d68c85c6cb17c2c508b8650dcee143" set:html={JSON.stringify(reviewsSchema)} />
-    <script is:inline src="https://embedsocial.com/cdn/rsh2.js"></script>
   </head>
   <body>
     <Header />

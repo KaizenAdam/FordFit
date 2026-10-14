@@ -56,5 +56,6 @@ One-time setup:
 
 The review sections are built from `src/data/reviews.js`: Toby's 50 written Google reviews,
 copied from the GHL widgets on 14 Oct 2026. They don't update by themselves. To add a review,
-copy it from Google into the top of that list and bump `REVIEW_COUNT` (also update the
-`reviewCount` in `src/layouts/Base.astro`, which feeds the stars in Google results).
+copy it from Google into the top of that list and bump `REVIEW_COUNT`, which counts both Google
+listings (Long Stratton + Wymondham). Also update `reviewCount` in `src/layouts/Base.astro`,
+which feeds the stars in Google results.

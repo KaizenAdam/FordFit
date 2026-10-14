@@ -1,11 +1,13 @@
 // Toby's Google reviews, copied from the GHL review widgets on 14 Oct 2026 (the 50 with written
-// text; the other 8 of the 58 are star-only and GHL never showed them). Newest first.
+// text; GHL never showed star-only reviews). Newest first.
 // To add a new review, add an entry at the top and bump REVIEW_COUNT.
 
-export const REVIEW_COUNT = 58;
+// Both Google listings combined: Long Stratton (56) + Wymondham (43), 14 Oct 2026.
+export const REVIEW_COUNT = 99;
 export const RATING = '5.00';
-// Toby's Google listing (South Norfolk Leisure Centre, Long Stratton), for the Write a review button.
-export const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps?cid=16215892301365660661';
+// Toby's Long Stratton Google listing (41 Swan Ln). Opens the listing, where visitors tap
+// "Write a review"; the direct writereview link can loop on Google sign-in.
+export const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps/place/?q=place_id:ChIJ_b2N9Kbp2UcRVZIbTWO9ZKY';
 
 export const REVIEWS = [
   { name: "Sam Holtzer", date: '2026-10-02', text: "I recently did a boxing course run by Toby. He seemed skilled and knowledgeable in everything he taught us and explained everything clearly. The course was challenging and definitely improved my skills. I’d definitely recommend him to others." },
