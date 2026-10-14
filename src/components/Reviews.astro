@@ -1,0 +1,254 @@
+---
+// Google reviews, rebuilt from the GHL review widgets with the reviews saved in
+// src/data/reviews.js (fixed: new Google reviews don't appear until added there).
+//   variant="carousel"  most pages: header, AI summary bullets, 3 cards a page with page numbers
+//   variant="masonry"   About page: "Read what my clients think...", 4 columns, Load More
+//   variant="single"    Start Your Journey: rating, AI summary, one card a page
+import { REVIEWS, REVIEW_COUNT, RATING, GOOGLE_REVIEWS_URL } from '../data/reviews.js';
+
+const { variant = 'carousel' } = Astro.props;
+const PER_PAGE = { carousel: 3, single: 1, masonry: 12 }[variant];
+const CUT = 150;
+
+const SUMMARY = {
+  carousel: [
+    'Reliable, punctual coaching with thorough session preparation.',
+    'Bespoke programs covering strength, mobility, rehab, cardio and nutrition with clear progress tracking.',
+    'Supportive, motivating delivery that builds confidence across ages and experience levels and fosters a strong community vibe.',
+    'High technical knowledge with emphasis on safe technique, progression and measurable results.',
+  ],
+  single: [
+    'Highly knowledgeable and dedicated trainer',
+    'Creates personalized and engaging training plans',
+    'Sessions are enjoyable and motivating',
+    'Supportive atmosphere fosters achievement of fitness goals',
+    'Strongly recommended across various customer experiences.',
+  ],
+  masonry: 'Well-regarded for reliable, punctual, and friendly coaching with tailored programs, strong technical knowledge, motivating sessions (solo and group), nutrition support and a useful progress-tracking app that suits all ages and rehab/mobility needs; few or no consistent drawbacks were reported.',
+}[variant];
+
+const fmtDate = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC' });
+const initials = (n) => n.replace(/[^\p{L}\s]/gu, '').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || n[0].toUpperCase();
+const short = (t) => (t.length > CUT ? t.slice(0, CUT).trimEnd() : null);
+const pages = Math.ceil(REVIEWS.length / PER_PAGE);
+const stars = Array.from({ length: 5 });
+---
+<div class:list={['rv', `rv-${variant}`]} data-reviews data-per-page={PER_PAGE} data-variant={variant}>
+  {variant !== 'single' ? (
+    <div class="rv-head">
+      <div class="rv-head-text">
+        <p class="rv-title">{variant === 'masonry' ? 'Read what my clients think...' : 'WHAT OUR CLIENTS SAY'}</p>
+        {variant === 'carousel' && <p class="rv-desc">With over 50 five-star reviews across Long Stratton and Wymondham, FordFit’s proven approach speaks for itself.</p>}
+      </div>
+      <div class="rv-score">
+        <div class="rv-score-inner">
+          <p class="rv-rating">{RATING}</p>
+          <p class="rv-meta"><span class="rv-stars" aria-label="5 out of 5 stars">{stars.map(() => <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6L10 15l-5.4 3 1.2-6L1.3 7.8l6.1-.7z" /></svg>)}</span><span class="rv-divider"></span><span class="rv-count">{REVIEW_COUNT} reviews</span></p>
+        </div>
+        <a class="rv-write" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener">Write a review</a>
+      </div>
+    </div>
+  ) : (
+    <div class="rv-score rv-score-centre">
+      <p class="rv-rating">{RATING}</p>
+      <p class="rv-meta"><span class="rv-stars" aria-label="5 out of 5 stars">{stars.map(() => <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6L10 15l-5.4 3 1.2-6L1.3 7.8l6.1-.7z" /></svg>)}</span><span class="rv-divider"></span><span class="rv-count">{REVIEW_COUNT} reviews</span></p>
+    </div>
+  )}
+
+  {variant !== 'masonry' && (
+    <div class="rv-card rv-summary">
+      <p class="rv-summary-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3l1.6 4.4L15 9l-4.4 1.6L9 15l-1.6-4.4L3 9l4.4-1.6zM18 13l.9 2.1L21 16l-2.1.9L18 19l-.9-2.1L15 16l2.1-.9zM18 2l.7 1.3L20 4l-1.3.7L18 6l-.7-1.3L16 4l1.3-.7z" /></svg>AI Summary</p>
+      <ul>{(SUMMARY as string[]).map((s) => <li>{s}</li>)}</ul>
+    </div>
+  )}
+
+  <ul class="rv-cards">
+    {variant === 'masonry' && (
+      <li class="rv-card rv-summary rv-summary-card">
+        <p class="rv-summary-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3l1.6 4.4L15 9l-4.4 1.6L9 15l-1.6-4.4L3 9l4.4-1.6zM18 13l.9 2.1L21 16l-2.1.9L18 19l-.9-2.1L15 16l2.1-.9zM18 2l.7 1.3L20 4l-1.3.7L18 6l-.7-1.3L16 4l1.3-.7z" /></svg>AI Summary</p>
+        <p>{SUMMARY}</p>
+      </li>
+    )}
+    {REVIEWS.map((r, i) => {
+      const s = short(r.text);
+      return (
+        <li class="rv-card rv-review" data-i={i} hidden={i >= PER_PAGE}>
+          <div class="rv-review-top">
+            <span class="rv-score-n">5 <span class="rv-stars">{stars.map(() => <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6L10 15l-5.4 3 1.2-6L1.3 7.8l6.1-.7z" /></svg>)}</span></span>
+            <time datetime={r.date}>{fmtDate(r.date)}</time>
+          </div>
+          <p class="rv-text">
+            {s ? (
+              <>
+                <span class="rv-short">{s}... </span><span class="rv-full" hidden>{r.text} </span>
+                <button type="button" class="rv-more" aria-expanded="false">More</button>
+              </>
+            ) : r.text}
+          </p>
+          <div class="rv-foot">
+            <span class="rv-who">{variant !== 'carousel' && <span class="rv-avatar" aria-hidden="true">{initials(r.name)}</span>}{r.name}</span>
+            <svg class="rv-g" viewBox="0 0 48 48" aria-label="Google review"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.5h7.1c4.2-3.8 6.6-9.5 6.6-16.2z"/><path fill="#34A853" d="M24 46c6 0 11-2 14.6-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.5 2.1-5.8 0-10.6-3.9-12.4-9.1H4.3v5.7C7.9 41.1 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.6 28.1c-.4-1.3-.7-2.7-.7-4.1s.3-2.8.7-4.1v-5.7H4.3C2.8 17.2 2 20.5 2 24s.8 6.8 2.3 9.8l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.3 0 6.2 1.1 8.5 3.3l6.3-6.3C35 4.2 30 2 24 2 15.4 2 7.9 6.9 4.3 14.2l7.3 5.7c1.7-5.2 6.6-9.1 12.4-9.1z"/></svg>
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+
+  {variant === 'masonry' ? (
+    <div class="rv-bottom"><button type="button" class="rv-load">Load More</button></div>
+  ) : (
+    <nav class="rv-bottom rv-pager" aria-label="Review pages" data-pages={pages}>
+      <button type="button" class="rv-arrow" data-step="-1" aria-label="Previous reviews">‹</button>
+      <span class="rv-nums"></span>
+      <button type="button" class="rv-arrow" data-step="1" aria-label="Next reviews">›</button>
+    </nav>
+  )}
+</div>
+
+<style>
+  .rv { font-family: Arial, Helvetica, sans-serif; color: #000; border-radius: 12px; }
+  .rv-carousel, .rv-masonry { background: var(--smoke); }
+  .rv-head { display: flex; justify-content: space-between; align-items: center; gap: 30px; padding: 40px 50px 20px; }
+  .rv-title { font-size: 24px; font-weight: 600; line-height: 1.2; }
+  .rv-masonry .rv-title { font-size: 21px; color: #2a3135; }
+  .rv-desc { font-size: 12.25px; line-height: 1.8; color: #98a2b3; }
+  .rv-score { display: flex; align-items: center; gap: 24px; }
+  .rv-score-inner { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .rv-rating { font-size: 40px; font-weight: 700; line-height: 1; }
+  .rv-meta { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+  .rv-stars { display: inline-flex; gap: 2px; }
+  .rv-stars svg { width: 16px; height: 16px; fill: #000; }
+  .rv-divider { width: 1px; height: 20px; background: #98a2b3; }
+  .rv-count { color: #98a2b3; white-space: nowrap; }
+  .rv-write { background: #000; color: #fff; border-radius: 8px; padding: 10px 20px; font-size: 20px; font-weight: 600; line-height: 36px; text-decoration: none; white-space: nowrap; }
+  .rv-write:hover { opacity: .85; }
+
+  .rv-card { background: #fff; border: 1px solid #f2f4f7; border-radius: 14px; padding: 20px 18px 16px; box-shadow: 0 5px 10px rgba(0, 0, 0, .1); }
+  .rv-summary { margin: 0 20px 20px; }
+  .rv-summary-title { display: flex; align-items: center; gap: 8px; font-size: 15.4px; font-weight: 600; line-height: 1.8; }
+  .rv-summary-title svg { width: 20px; height: 20px; fill: currentColor; }
+  .rv-masonry .rv-summary-title, .rv-single .rv-summary-title { color: #6941c6; }
+  .rv-summary ul { margin-top: 6px; }
+  .rv-summary li { position: relative; padding-left: 22px; font-size: 14.7px; line-height: 1.6; color: #2a3135; }
+  .rv-summary li::before { content: ''; position: absolute; left: 0; top: .45em; width: 12px; height: 12px; border-radius: 50%; background: #e4f3ef; }
+  .rv-summary-card p:not(.rv-summary-title) { font-size: 14px; line-height: 1.6; color: #2a3135; margin-top: 8px; }
+
+  .rv-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding: 0 29px 20px; align-items: start; }
+  .rv-review { display: flex; flex-direction: column; min-height: 218px; }
+  .rv-review[hidden] { display: none; }
+  .rv-review-top { display: flex; justify-content: space-between; align-items: center; }
+  .rv-score-n { display: inline-flex; align-items: center; gap: 6px; font-size: 21px; font-weight: 600; color: #18150e; line-height: 1.8; }
+  .rv-score-n .rv-stars svg { fill: #18150e; }
+  .rv-review time { font-size: 12.25px; color: #667085; }
+  .rv-text { flex: 1; font-size: 12.6px; line-height: 1.8; color: #2a3135; margin: 6px 0 14px; overflow-wrap: anywhere; }
+  .rv-more { color: #2563eb; font-weight: 500; font-size: 12.6px; margin-left: 4px; }
+  .rv-more:hover { text-decoration: underline; }
+  .rv-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12.25px; font-weight: 500; color: #667085; }
+  .rv-who { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+  .rv-avatar { flex: none; width: 24px; height: 24px; border-radius: 50%; background: #98a2b3; color: #fff; display: grid; place-items: center; font-size: 10px; font-weight: 600; }
+  .rv-g { width: 18px; height: 18px; flex: none; }
+
+  .rv-bottom { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 5px 50px 20px; }
+  .rv-arrow { font-size: 22px; line-height: 1; padding: 2px 10px; color: #000; }
+  .rv-nums { display: inline-flex; align-items: center; gap: 8px; font-size: 12.25px; }
+  .rv-nums button { padding: 0 4px; font-size: 12.25px; color: #000; }
+  .rv-nums button[aria-current] { font-size: 17px; font-weight: 700; }
+  .rv-load { font-size: 14px; font-weight: 600; color: #000; padding: 6px 12px; }
+  .rv-load:hover { text-decoration: underline; }
+
+  /* About page: masonry columns */
+  .rv-masonry .rv-cards { display: block; columns: 4 230px; column-gap: 18px; }
+  .rv-masonry .rv-cards > li { break-inside: avoid; margin: 0 0 18px; min-height: 0; }
+  .rv-masonry .rv-summary-card { margin: 0 0 18px; }
+
+  /* Start Your Journey: one review at a time */
+  .rv-single { padding: 10px 0; }
+  .rv-score-centre { flex-direction: column; gap: 4px; margin-bottom: 20px; }
+  .rv-single .rv-summary { margin: 0 0 20px; }
+  .rv-single .rv-summary li { font-size: 14px; }
+  .rv-single .rv-cards { grid-template-columns: 1fr; padding: 0; }
+  .rv-single .rv-review { min-height: 0; }
+  .rv-single .rv-text { font-size: 13px; }
+  .rv-single .rv-bottom { padding: 18px 0 0; }
+
+  @media (max-width: 900px) {
+    .rv-cards { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 767px) {
+    .rv-head { flex-direction: column; align-items: flex-start; padding: 28px 18px 16px; gap: 16px; }
+    .rv-score { width: 100%; justify-content: space-between; }
+    .rv-score-inner { align-items: flex-start; }
+    .rv-title { font-size: 20px; }
+    .rv-write { font-size: 16px; line-height: 28px; }
+    .rv-summary { margin: 0 12px 16px; }
+    .rv-cards { grid-template-columns: 1fr; padding: 0 12px 16px; }
+    .rv-review { min-height: 0; }
+    .rv-bottom { padding: 5px 12px 18px; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-reviews]').forEach((root) => {
+    const cards = [...root.querySelectorAll('.rv-review')];
+    const per = Number(root.dataset.perPage);
+
+    // More / Less on long reviews
+    root.addEventListener('click', (e) => {
+      const btn = e.target.closest('.rv-more');
+      if (!btn) return;
+      const p = btn.parentElement;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      p.querySelector('.rv-short').hidden = !open;
+      p.querySelector('.rv-full').hidden = open;
+      btn.textContent = open ? 'More' : 'Less';
+      btn.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Load More (About page)
+    const load = root.querySelector('.rv-load');
+    if (load) {
+      let shown = per;
+      load.addEventListener('click', () => {
+        shown += per;
+        cards.forEach((c, i) => (c.hidden = i >= shown));
+        if (shown >= cards.length) load.hidden = true;
+      });
+      return;
+    }
+
+    // Page numbers: 1 2 3 4 5 ... last, like the GHL widget
+    const pager = root.querySelector('.rv-pager');
+    const nums = pager.querySelector('.rv-nums');
+    const total = Number(pager.dataset.pages);
+    let page = 0;
+    const list = (p) => {
+      const out = new Set([0, total - 1]);
+      const start = Math.max(0, Math.min(p - 2, total - 5));
+      for (let i = start; i < Math.min(total, start + 5); i++) out.add(i);
+      return [...out].sort((a, b) => a - b);
+    };
+    const go = (p) => {
+      page = (p + total) % total;
+      cards.forEach((c, i) => (c.hidden = Math.floor(i / per) !== page));
+      nums.innerHTML = '';
+      let prev = -1;
+      for (const i of list(page)) {
+        if (i - prev > 1) nums.insertAdjacentHTML('beforeend', '<span aria-hidden="true">...</span>');
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = String(i + 1);
+        b.dataset.page = String(i);
+        b.setAttribute('aria-label', `Reviews page ${i + 1}`);
+        if (i === page) b.setAttribute('aria-current', 'page');
+        nums.appendChild(b);
+        prev = i;
+      }
+    };
+    pager.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      go(b.dataset.step ? page + Number(b.dataset.step) : Number(b.dataset.page));
+    });
+    go(0);
+  });
+</script>

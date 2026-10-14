@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import LeadForm from '../components/LeadForm.astro';
-import ReviewWidget from '../components/ReviewWidget.astro';
+import Reviews from '../components/Reviews.astro';
 
 const strip = Array.from({ length: 11 }, (_, i) => `/assets/img/strip-${i + 1}.webp`);
 ---
@@ -16,7 +16,7 @@ const strip = Array.from({ length: 11 }, (_, i) => `/assets/img/strip-${i + 1}.w
 
       <div class="sj-grid">
         <div class="sj-form"><LeadForm form="journey" /></div>
-        <div class="sj-reviews"><ReviewWidget widgetId="6917121c169c61da93d97ac0" /></div>
+        <div class="sj-reviews"><Reviews variant="single" /></div>
       </div>
 
       <div class="strip" aria-label="Toby coaching FordFit clients">

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import ReviewWidget from '../components/ReviewWidget.astro';
+import Reviews from '../components/Reviews.astro';
 import StoryGallery from '../components/StoryGallery.astro';
 import AppPromo from '../components/AppPromo.astro';
 import { START_URL } from '../site.js';
@@ -23,7 +23,7 @@ const images = [1, 2, 3, 4, 5, 6].map((n) => `/assets/img/about-${n}.webp`);
       <p class="proof-kicker">NEED MORE CONVINCING?</p>
       <h2 class="proof-title">PROOF THAT EFFORT PAYS OFF</h2>
       <p class="proof-intro">Every five-star review tells a story of consistency, confidence, and progress. Behind each one is someone who committed to change — from first-time gym-goers to seasoned athletes. At FordFit, these transformations aren’t luck; they’re the result of expert coaching, accountability, and a community that keeps you pushing forward. These are the real results behind FordFit.</p>
-      <div class="review-widget"><ReviewWidget widgetId="690df20758251368e3f46cbf" /></div>
+      <div class="review-widget"><Reviews variant="masonry" /></div>
     </div>
   </section>
 

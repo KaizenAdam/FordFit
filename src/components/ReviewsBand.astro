@@ -1,7 +1,7 @@
 ---
-// Google reviews widget on a full-width band, optionally over one of the silk background videos.
-import ReviewWidget from './ReviewWidget.astro';
-const { video, widgetId, bg = 'var(--white)', id } = Astro.props;
+// Google reviews on a full-width band, optionally over one of the silk background videos.
+import Reviews from './Reviews.astro';
+const { video, bg = 'var(--white)', id } = Astro.props;
 ---
 <section class="reviews-band" id={id} style={`background:${bg}`}>
   {video && (
@@ -10,7 +10,7 @@ const { video, widgetId, bg = 'var(--white)', id } = Astro.props;
     </video>
   )}
   <div class="container">
-    <div class="review-widget"><ReviewWidget widgetId={widgetId} /></div>
+    <div class="review-widget"><Reviews /></div>
   </div>
 </section>
 

@@ -52,7 +52,9 @@ One-time setup:
 4. To test without emailing Toby, put your own address in `TEST_RECIPIENTS` in `contact.php`,
    deploy, submit both forms, then set it back to `[]`.
 
-## Still on GoHighLevel
+## Reviews
 
-The review widgets (`ReviewWidget.astro`, widget IDs set on each page) are GHL Reputation
-embeds and stop working if the GHL account is closed.
+The review sections are built from `src/data/reviews.js`: Toby's 50 written Google reviews,
+copied from the GHL widgets on 14 Oct 2026. They don't update by themselves. To add a review,
+copy it from Google into the top of that list and bump `REVIEW_COUNT` (also update the
+`reviewCount` in `src/layouts/Base.astro`, which feeds the stars in Google results).
