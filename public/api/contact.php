@@ -21,7 +21,7 @@
  * redirects back to the page with ?sent=1 or ?error=1).
  */
 
-const MAX = ['form' => 20, 'name' => 100, 'phone' => 40, 'email' => 200];
+const MAX = ['form' => 20, 'name' => 100, 'phone' => 40, 'email' => 200, 'message' => 2000];
 const CONTACT_EMAIL = 'toby@fordfitpt.com';
 const SERVICES = [
     'Online Coaching',
@@ -31,6 +31,8 @@ const SERVICES = [
 ];
 // Where each form lives, for the no-JS redirect.
 const PAGES = ['journey' => '/start-your-journey-page', 'trial' => '/'];
+
+require __DIR__ . '/emails.php';
 
 // TEST MODE: while this list is non-empty, notifications go ONLY to these addresses,
 // overriding the 'to' list in the config (Toby is left off until Kaizen has tested the
@@ -56,10 +58,6 @@ function respond(bool $ok, string $error = '', int $status = 200): void {
 
 function clean($v, int $max): string {
     return is_string($v) ? mb_substr(trim($v), 0, $max) : '';
-}
-
-function e(string $s): string {
-    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -116,65 +114,15 @@ $who       = $name !== '' ? $name : $f['email'];
 $firstName = $name !== '' ? explode(' ', $name)[0] : '';
 $what      = $isTrial ? '7 day free trial (FordFit App)' : implode(', ', $services);
 $rows = [
-    'Form'    => $isTrial ? '7 day free trial popup' : 'Start Your Journey',
     'Name'    => $name !== '' ? $name : '-',
     'Phone'   => $f['phone'],
     'Email'   => $f['email'],
     ($isTrial ? 'Wants' : 'Services') => $what,
 ];
 
-/**
- * Shared branded shell for both emails. Table layout + inline styles -
- * email clients strip <style> blocks and flex/grid unpredictably.
- * Colours: FordFit black #000000, smoke #F5F5F5, slate #565A7C.
- */
-function emailShell(string $preheader, string $bodyHtml): string {
-    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
-    . '<body style="margin:0;padding:0;background:#F5F5F5;font-family:-apple-system,\'Segoe UI\',Roboto,sans-serif;">'
-    . '<div style="display:none;max-height:0;overflow:hidden;opacity:0;">' . e($preheader) . '</div>'
-    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5F5F5;padding:32px 16px;"><tr><td align="center">'
-    . '<table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #e4e4e4;">'
-    . '<tr><td style="background:#000000;padding:22px 32px;"><img src="https://fordfitpt.com/assets/img/email-logo.png" alt="FordFit Personal Training" width="180" height="60" style="display:block;width:180px;height:60px;border:0;"></td></tr>'
-    . '<tr><td style="padding:28px 32px 0;">' . $bodyHtml . '</td></tr>'
-    . '<tr><td style="height:32px;font-size:0;line-height:0;">&nbsp;</td></tr>'
-    . '<tr><td style="background:#000000;padding:22px 32px;font-size:12px;line-height:1.7;color:#b8b8b8;letter-spacing:1px;">'
-    . 'MAKE A DIFFERENCE.<br>'
-    . '<a href="mailto:' . CONTACT_EMAIL . '" style="color:#ffffff;">' . CONTACT_EMAIL . '</a> &middot; '
-    . '<a href="tel:+447495141804" style="color:#ffffff;">07495 141804</a> &middot; '
-    . '<a href="https://fordfitpt.com" style="color:#ffffff;">fordfitpt.com</a>'
-    . '</td></tr></table></td></tr></table></body></html>';
-}
-
-// ── Email 1: notification, to Toby ───────────────────────────────────────
-$notifyText = "New enquiry from the FordFit website\n\n";
-foreach ($rows as $k => $v) $notifyText .= "$k: $v\n";
-
-$rowsHtml = '';
-foreach ($rows as $k => $v) {
-    $rowsHtml .= '<tr><td style="padding:5px 16px 5px 0;color:#565A7C;font-size:13px;vertical-align:top;white-space:nowrap;">' . e($k) . '</td>'
-        . '<td style="padding:5px 0;font-weight:600;color:#000000;font-size:14px;">' . e($v) . '</td></tr>';
-}
-$notifyHtml = emailShell("New enquiry from $who",
-    '<h1 style="margin:0 0 20px;font-size:20px;color:#000000;">' . ($isTrial ? 'New free trial request' : 'New website enquiry') . '</h1>'
-    . '<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin-bottom:8px;">' . $rowsHtml . '</table>'
-    . '<p style="margin-top:20px;font-size:12px;color:#565A7C;line-height:1.6;">Replying to this email goes straight to ' . e($who) . '.</p>'
-);
-
-// ── Email 2: auto-reply, to the enquirer ─────────────────────────────────
-$hi = $firstName !== '' ? "Hi $firstName," : 'Hi,';
-if ($isTrial) {
-    $replyLead = 'Thanks for signing up for your 7 day free trial of the FordFit App. Toby will be in touch to get you set up.';
-} else {
-    $replyLead = 'Thanks for getting in touch with FordFit Personal Training. Toby will be in touch to book your consultation and talk through the best plan for your goals.';
-}
-$replyText = "$hi\n\n$replyLead\n\n"
-    . "If you'd like to add anything in the meantime, just reply to this email.\n\n"
-    . "FordFit Personal Training - Make a difference.\n" . CONTACT_EMAIL . " - 07495 141804\n";
-$replyHtml = emailShell($isTrial ? 'Your FordFit free trial - Toby will be in touch.' : "Thanks for getting in touch - Toby will be in touch soon.",
-    '<h1 style="margin:0 0 16px;font-size:20px;color:#000000;">' . e($firstName !== '' ? "Thanks, $firstName." : 'Thanks for getting in touch.') . '</h1>'
-    . '<p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#333333;">' . e($replyLead) . '</p>'
-    . '<p style="margin:0;font-size:14px;line-height:1.7;color:#333333;">Want to add anything in the meantime? Just reply to this email.</p>'
-);
+$message = $isTrial ? '' : $f['message'];
+[$notifyHtml, $notifyText] = notifyEmail($isTrial, $who, $firstName, $rows, $message, $f['email'], $f['phone'], CONTACT_EMAIL);
+[$replySubject, $replyHtml, $replyText] = replyEmail($isTrial, $firstName, CONTACT_EMAIL);
 
 function resendSend(string $apiKey, array $payload): array {
     $ch = curl_init('https://api.resend.com/emails');
@@ -214,7 +162,7 @@ if (!$notifyOk) {
     'from'     => "FordFit Personal Training <$from>",
     'to'       => [$replyTo],
     'reply_to' => CONTACT_EMAIL,
-    'subject'  => $isTrial ? 'Your FordFit free trial' : 'Thanks for getting in touch - FordFit Personal Training',
+    'subject'  => $replySubject,
     'text'     => $replyText,
     'html'     => $replyHtml,
 ]);

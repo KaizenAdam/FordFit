@@ -1,4 +1,5 @@
-# Only contact.php is public. config.php (if it is ever placed here) holds the Resend key.
-<Files "config.php">
+# Only contact.php is public. config.php (if it is ever placed here) holds the Resend key;
+# emails.php only holds the email templates contact.php includes.
+<FilesMatch "^(config|emails)\.php$">
   Require all denied
-</Files>
+</FilesMatch>

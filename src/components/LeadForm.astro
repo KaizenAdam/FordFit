@@ -19,71 +19,142 @@ const services = [
       <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
     </div>
 
+    {!isTrial && (
+      <div class="lead-head">
+        <p class="lead-eyebrow">Start your journey</p>
+        <h2 class="lead-title">Tell Toby about you</h2>
+      </div>
+    )}
+
     <div class="lead-field">
-      <label for={`${id}-name`}>Full Name{isTrial && ' *'}</label>
-      <input id={`${id}-name`} name="name" type="text" placeholder="Full Name" autocomplete="name" maxlength="100" required={isTrial} />
+      <label for={`${id}-name`}>Full name{isTrial ? <span aria-hidden="true"> *</span> : <span class="lead-opt"> (optional)</span>}</label>
+      <input id={`${id}-name`} name="name" type="text" placeholder="Jane Smith" autocomplete="name" maxlength="100" required={isTrial} />
     </div>
-    <div class="lead-field">
-      <label for={`${id}-phone`}>Phone *</label>
-      <input id={`${id}-phone`} name="phone" type="tel" placeholder="Phone" autocomplete="tel" maxlength="40" required />
-    </div>
-    <div class="lead-field">
-      <label for={`${id}-email`}>Email *</label>
-      <input id={`${id}-email`} name="email" type="email" placeholder="Email" autocomplete="email" maxlength="200" required />
+    <div class="lead-row">
+      <div class="lead-field">
+        <label for={`${id}-phone`}>Phone<span aria-hidden="true"> *</span></label>
+        <input id={`${id}-phone`} name="phone" type="tel" placeholder="07700 900123" autocomplete="tel" maxlength="40" required />
+      </div>
+      <div class="lead-field">
+        <label for={`${id}-email`}>Email<span aria-hidden="true"> *</span></label>
+        <input id={`${id}-email`} name="email" type="email" placeholder="you@example.com" autocomplete="email" maxlength="200" required />
+      </div>
     </div>
 
     {!isTrial && (
       <fieldset class="lead-field lead-services">
-        <legend>Service You Desire *</legend>
-        {services.map((s, i) => (
-          <label class="lead-option" for={`${id}-svc-${i}`}>
-            <input id={`${id}-svc-${i}`} type="checkbox" name="services[]" value={s} />
-            <span>{s}</span>
-          </label>
-        ))}
+        <legend>Which service are you interested in?<span aria-hidden="true"> *</span></legend>
+        <div class="lead-options">
+          {services.map((s, i) => (
+            <label class="lead-option" for={`${id}-svc-${i}`}>
+              <input id={`${id}-svc-${i}`} type="checkbox" name="services[]" value={s} />
+              <span class="lead-tick" aria-hidden="true"></span>
+              <span>{s.replace('Personal Training - ', '1-2-1 · ')}</span>
+            </label>
+          ))}
+        </div>
       </fieldset>
     )}
 
+    {!isTrial && (
+      <div class="lead-field">
+        <label for={`${id}-message`}>Anything Toby should know?<span class="lead-opt"> (optional)</span></label>
+        <textarea id={`${id}-message`} name="message" rows="3" maxlength="2000" placeholder="Your goals, injuries, the best times to reach you…"></textarea>
+      </div>
+    )}
+
     <p class="lead-error" role="alert" hidden></p>
-    <button type="submit" class="lead-submit">{isTrial ? 'GET STARTED' : 'SUBMIT'}</button>
+    <button type="submit" class="lead-submit">
+      <span data-label>{isTrial ? 'Start my free trial' : 'Send to Toby'}</span>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+    <p class="lead-note">Toby will only use your details to get in touch about your enquiry.</p>
   </form>
 
   <div class="lead-thanks" tabindex="-1" hidden>
+    <div class="lead-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
     {isTrial
-      ? <p><strong>THANK YOU!</strong><br /><br />Toby will be in touch to get you set up!</p>
-      : <p>Thank you for taking the time to complete this form.</p>}
+      ? <><h3>You’re in!</h3><p>Toby will be in touch to get you set up on the FordFit App. Keep an eye on your inbox.</p></>
+      : <><h3>Thanks, that’s with Toby.</h3><p>He’ll be in touch to book your consultation. We’ve sent a confirmation to your inbox.</p></>}
   </div>
 </div>
 
 <style>
-  .lead { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: #2c3345; padding: 30px 30px 24px; }
-  .lead-trial { padding: 10px 30px 20px; }
+  .lead { font-family: var(--open-sans); color: var(--black); padding: 32px 32px 26px; }
+  .lead-trial { padding: 8px 0 0; }
   .lead-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
-  .lead-field { margin: 0 0 16px; border: 0; padding: 0; min-width: 0; }
-  .lead-field label, .lead-field legend { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; padding: 0; }
-  .lead-field input[type='text'], .lead-field input[type='tel'], .lead-field input[type='email'] {
-    width: 100%; font: inherit; font-size: 14px; color: #2c3345; background: var(--white);
-    border: 1px solid #acacac; border-radius: 5px; padding: 8px 15px; min-height: 38px;
+  .lead-head { margin-bottom: 22px; }
+  .lead-eyebrow { font-family: var(--poppins); font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--slate); }
+  .lead-title { font-family: var(--poppins); font-size: 24px; font-weight: 700; line-height: 1.25; margin-top: 4px; }
+  .lead-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  .lead-field { margin: 0 0 18px; border: 0; padding: 0; min-width: 0; }
+  .lead-field label, .lead-field legend {
+    display: block; font-family: var(--poppins); font-size: 13px; font-weight: 500; margin-bottom: 7px; padding: 0;
   }
-  .lead-trial .lead-field input { border-color: var(--black); }
-  .lead-field input::placeholder { color: #8c8c8c; }
-  .lead-field input:focus-visible { outline: 2px solid #101828; outline-offset: 1px; }
+  .lead-opt { color: #8a8fa8; font-weight: 400; }
+  .lead-field input[type='text'], .lead-field input[type='tel'], .lead-field input[type='email'], .lead-field textarea {
+    width: 100%; font: inherit; font-size: 15px; color: var(--black); background: #fafafa;
+    border: 1.5px solid #dcdcdc; border-radius: 10px; padding: 12px 14px; min-height: 48px;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .lead-field textarea { resize: vertical; min-height: 92px; line-height: 1.5; }
+  .lead-field input::placeholder, .lead-field textarea::placeholder { color: #a3a3a3; }
+  .lead-field input:hover, .lead-field textarea:hover { border-color: #b5b5b5; }
+  .lead-field input:focus, .lead-field textarea:focus {
+    outline: none; border-color: var(--black); background: var(--white); box-shadow: 0 0 0 4px rgba(0, 0, 0, .08);
+  }
+  .lead-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .lead-field .lead-option {
-    display: flex; align-items: center; gap: 10px; width: 262px; max-width: 100%;
-    border: 1px solid #acacac; border-radius: 8px; padding: 9px 14px; margin: 0 0 8px;
-    font-size: 12px; font-weight: 300; color: #5a5a5a; cursor: pointer;
+    position: relative; display: flex; align-items: center; gap: 10px; margin: 0;
+    border: 1.5px solid #dcdcdc; border-radius: 10px; padding: 12px 12px; background: #fafafa;
+    font-family: var(--open-sans); font-size: 13px; font-weight: 500; line-height: 1.3; color: #3a3a3a; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
   }
-  .lead-option input { width: 15px; height: 15px; margin: 0; flex: none; accent-color: #101828; }
-  .lead-field .lead-option:has(input:checked) { border-color: #101828; color: #101828; font-weight: 500; }
-  .lead-error { color: #b42318; font-size: 14px; margin: 0 0 12px; }
+  .lead-option:hover { border-color: #b5b5b5; }
+  .lead-option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .lead-tick {
+    flex: none; width: 18px; height: 18px; border: 1.5px solid #b5b5b5; border-radius: 5px; background: var(--white);
+    display: grid; place-items: center; transition: background .15s ease, border-color .15s ease;
+  }
+  .lead-tick::after {
+    content: ''; width: 9px; height: 5px; border: 2px solid var(--black); border-top: 0; border-right: 0;
+    transform: translateY(-1px) rotate(-45deg); opacity: 0;
+  }
+  .lead-field .lead-option:has(input:checked) { border-color: var(--black); background: var(--black); color: var(--white); }
+  .lead-option:has(input:checked) .lead-tick { border-color: var(--white); }
+  .lead-option:has(input:checked) .lead-tick::after { opacity: 1; }
+  .lead-option:has(input:focus-visible) { box-shadow: 0 0 0 4px rgba(0, 0, 0, .15); }
+  .lead-error {
+    color: #b42318; background: #fef3f2; border: 1px solid #fecdca; border-radius: 10px;
+    font-size: 14px; padding: 10px 14px; margin: 0 0 14px;
+  }
   .lead-submit {
-    width: 100%; background: #101828; color: var(--white); border-radius: 8px; padding: 12px 20px; margin-top: 8px;
-    font-family: var(--poppins); font-size: 14px; font-weight: 500; letter-spacing: .5px; transition: opacity .2s ease;
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--black); color: var(--white); border-radius: 10px; padding: 16px 20px; margin-top: 4px;
+    font-family: var(--poppins); font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
   }
-  .lead-submit:hover { opacity: .9; }
-  .lead-submit[disabled] { opacity: .6; cursor: progress; }
-  .lead-thanks { font-family: var(--poppins); font-size: 16px; line-height: 1.5; text-align: center; padding: 40px 10px; color: var(--black); }
+  .lead-submit svg { width: 18px; height: 18px; transition: transform .15s ease; }
+  .lead-submit:hover { box-shadow: 0 8px 20px rgba(0, 0, 0, .18); transform: translateY(-1px); }
+  .lead-submit:hover svg { transform: translateX(3px); }
+  .lead-submit[disabled] { opacity: .6; cursor: progress; transform: none; box-shadow: none; }
+  .lead-note { font-size: 12px; color: #8a8fa8; text-align: center; margin-top: 12px; }
+  .lead-thanks { text-align: center; padding: 36px 10px 30px; }
   .lead-thanks:focus { outline: none; }
+  .lead-check {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--black); color: var(--white);
+    display: grid; place-items: center; margin: 0 auto 18px;
+  }
+  .lead-check svg { width: 30px; height: 30px; }
+  .lead-thanks h3 { font-family: var(--poppins); font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .lead-thanks p { font-size: 15px; line-height: 1.6; color: var(--slate); max-width: 340px; margin: 0 auto; }
+  @media (max-width: 480px) {
+    .lead:not(.lead-trial) { padding: 26px 20px 22px; }
+    .lead-row, .lead-options { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lead-submit, .lead-submit svg { transition: none; }
+  }
 </style>
 
 <script>
@@ -92,7 +163,8 @@ const services = [
     const error = root.querySelector('.lead-error');
     const thanks = root.querySelector('.lead-thanks');
     const button = root.querySelector('.lead-submit');
-    const label = button.textContent;
+    const labelEl = button.querySelector('[data-label]');
+    const label = labelEl.textContent;
     const isJourney = form.elements.form.value === 'journey';
 
     const showError = (msg) => { error.textContent = msg; error.hidden = false; };
@@ -119,14 +191,14 @@ const services = [
         return;
       }
       button.disabled = true;
-      button.textContent = 'SENDING…';
+      labelEl.textContent = 'Sending…';
       try {
         const res = await fetch(form.action, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             form: data.get('form'), website: data.get('website'), name: data.get('name'),
-            phone: data.get('phone'), email: data.get('email'), services,
+            phone: data.get('phone'), email: data.get('email'), message: data.get('message') || '', services,
           }),
         });
         const out = await res.json().catch(() => ({}));
@@ -136,7 +208,7 @@ const services = [
         showError('Sorry - we couldn’t send that. Check your connection, or email toby@fordfitpt.com instead.');
       } finally {
         button.disabled = false;
-        button.textContent = label;
+        labelEl.textContent = label;
       }
     });
   });
