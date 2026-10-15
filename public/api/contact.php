@@ -6,8 +6,8 @@
  * A submission sends two emails via Resend: a notification to Toby, and a branded
  * auto-reply to the enquirer confirming receipt.
  *
- * We send from the `send.fordfitpt.com` subdomain, which has its own Resend DKIM/SPF
- * records, so it can't affect Toby's real mailbox or clash with the root domain's SPF/DMARC.
+ * We send from do-not-reply@fordfitpt.com. Resend's DKIM sits on resend._domainkey and its
+ * SPF/MX on the `send` subdomain, so they don't touch Toby's Google Workspace records.
  *
  * Reply-To differs between the two emails so a reply always reaches a person:
  *   - Notification (to Toby): Reply-To is the enquirer.
@@ -109,7 +109,7 @@ if (!is_array($config) || empty($config['resend_api_key']) || $config['resend_ap
 }
 $to   = $config['to']   ?? [CONTACT_EMAIL];
 if (TEST_RECIPIENTS) $to = TEST_RECIPIENTS;
-$from = $config['from'] ?? 'do-not-reply@send.fordfitpt.com';
+$from = $config['from'] ?? 'do-not-reply@fordfitpt.com';
 
 $name      = $f['name'];
 $who       = $name !== '' ? $name : $f['email'];

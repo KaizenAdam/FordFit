@@ -5,5 +5,5 @@
 return [
   'resend_api_key' => 'PASTE_KEY_HERE',
   'to'   => ['toby@fordfitpt.com'],
-  'from' => 'do-not-reply@send.fordfitpt.com',
+  'from' => 'do-not-reply@fordfitpt.com',
 ];

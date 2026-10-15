@@ -44,8 +44,9 @@ is public: never commit the Resend key.
 
 One-time setup:
 
-1. Resend → Domains → add `send.fordfitpt.com` and add the DNS records it lists wherever
-   fordfitpt.com's DNS is managed. Wait until it shows Verified.
+1. Resend → Domains → add `fordfitpt.com` and add the DNS records it lists in Hostinger's DNS
+   zone (they sit on `resend._domainkey` and `send`, apart from Google Workspace's records).
+   Wait until it shows Verified.
 2. Resend → API Keys → create a key with "Sending access" for that domain only.
 3. hPanel → File Manager → the home folder (the one containing `public_html`) → create
    `fordfit-config.php` from `public/api/config.example.php` and paste the key.
